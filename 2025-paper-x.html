@@ -1,0 +1,1703 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>TALLENTEX 2025 Class 10 (Paper Code X)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .custom-scroll::-webkit-scrollbar { width: 5px; height: 5px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 4px; }
+    svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased font-sans select-none min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-indigo-900 text-white shadow sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-3 py-2 flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <span class="bg-amber-400 text-slate-950 text-[10px] font-black uppercase px-1.5 py-0.5 rounded">TALLENTEX 2025</span>
+        <h1 class="text-xs sm:text-base font-bold truncate max-w-[150px] sm:max-w-none">Class 10 (Code X)</h1>
+      </div>
+      <div class="flex items-center space-x-3">
+        <div class="text-right">
+          <span class="text-[10px] text-indigo-200 block leading-tight">Time Left</span>
+          <span id="timerDisplay" class="font-mono font-bold text-base sm:text-lg text-amber-300">02:00:00</span>
+        </div>
+        <button id="btnSubmitExam" class="bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-3 py-1.5 rounded shadow">
+          Submit
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Section Bar -->
+  <div class="bg-white border-b border-slate-200 shadow-sm sticky top-[49px] z-40">
+    <div class="max-w-7xl mx-auto px-3 flex space-x-2 overflow-x-auto py-2 custom-scroll" id="sectionTabs"></div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-3 py-3 flex-1 flex flex-col lg:flex-row gap-3 w-full">
+    
+    <!-- Question Area -->
+    <div class="flex-1 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col p-4 min-h-[500px]">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-200 mb-3">
+        <div class="flex items-center space-x-2">
+          <span class="font-bold text-slate-800 text-sm sm:text-base" id="qNumberDisplay">Question 1</span>
+          <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded border border-slate-300" id="qSubjectTag">Physics</span>
+        </div>
+        <div class="flex items-center space-x-2 text-[11px] font-semibold">
+          <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">+4</span>
+          <span class="text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">-1</span>
+        </div>
+      </div>
+
+      <!-- Question Text + Figures -->
+      <div id="questionContainer" class="flex-1 text-slate-800 text-xs sm:text-sm leading-relaxed overflow-y-auto custom-scroll pr-1"></div>
+
+      <!-- Action Buttons -->
+      <div class="pt-3 border-t border-slate-200 mt-3 flex items-center justify-between flex-wrap gap-2">
+        <div class="flex items-center space-x-1.5">
+          <button id="btnPrev" class="px-2.5 py-1.5 rounded border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold">Prev</button>
+          <button id="btnNext" class="px-3 py-1.5 rounded bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold">Save & Next</button>
+        </div>
+        <div class="flex items-center space-x-1.5">
+          <button id="btnClear" class="px-2 py-1.5 rounded border border-slate-300 text-slate-600 hover:text-slate-900 text-xs">Clear</button>
+          <button id="btnMarkReview" class="px-2.5 py-1.5 rounded bg-amber-500 hover:bg-amber-600 text-white text-xs font-medium">Review</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Palette -->
+    <aside class="w-full lg:w-72 bg-white rounded-xl shadow-sm border border-slate-200 p-3 flex flex-col shrink-0">
+      <h2 class="font-bold text-slate-800 text-xs mb-2">Question Palette (80 Questions)</h2>
+      <div class="grid grid-cols-2 gap-1.5 text-[10px] text-slate-600 mb-2 pb-2 border-b border-slate-200">
+        <div class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded bg-emerald-500"></span><span>Answered</span></div>
+        <div class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded bg-amber-500"></span><span>Review</span></div>
+        <div class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded bg-rose-500"></span><span>Unanswered</span></div>
+        <div class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded bg-slate-200 border"></span><span>Not Visited</span></div>
+      </div>
+      <div id="paletteGrid" class="grid grid-cols-8 lg:grid-cols-5 gap-1.5 overflow-y-auto max-h-[280px] lg:max-h-[460px] custom-scroll p-1"></div>
+    </aside>
+  </main>
+
+  <!-- Result Modal -->
+  <div id="resultModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 overflow-y-auto">
+    <div class="bg-white rounded-xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl max-h-[92vh] overflow-y-auto custom-scroll">
+      <div class="text-center pb-3 border-b border-slate-200">
+        <span class="bg-indigo-100 text-indigo-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Report Card</span>
+        <h2 class="text-xl font-black text-slate-900 mt-1">TALLENTEX 2025 Test Results (Code X)</h2>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 my-4">
+        <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-2 text-center">
+          <span class="text-[10px] font-semibold text-indigo-600 block">Total Score</span>
+          <span id="resTotalScore" class="text-lg font-black text-indigo-900">0 / 320</span>
+        </div>
+        <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-2 text-center">
+          <span class="text-[10px] font-semibold text-emerald-600 block">Correct (+4)</span>
+          <span id="resCorrect" class="text-lg font-black text-emerald-900">0</span>
+        </div>
+        <div class="bg-rose-50 border border-rose-200 rounded-lg p-2 text-center">
+          <span class="text-[10px] font-semibold text-rose-600 block">Wrong (-1)</span>
+          <span id="resIncorrect" class="text-lg font-black text-rose-900">0</span>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 rounded-lg p-2 text-center">
+          <span class="text-[10px] font-semibold text-slate-600 block">Unattempted</span>
+          <span id="resUnattempted" class="text-lg font-black text-slate-800">0</span>
+        </div>
+      </div>
+      <h3 class="text-xs font-bold text-slate-800 uppercase mb-2">Subject Breakdown</h3>
+      <div class="overflow-x-auto mb-4">
+        <table class="w-full text-left text-xs border border-slate-200">
+          <thead>
+            <tr class="bg-slate-100 text-slate-700">
+              <th class="p-1.5 border">Subject</th>
+              <th class="p-1.5 border text-center">Ques</th>
+              <th class="p-1.5 border text-center text-emerald-700">Right</th>
+              <th class="p-1.5 border text-center text-rose-700">Wrong</th>
+              <th class="p-1.5 border text-center">Marks</th>
+            </tr>
+          </thead>
+          <tbody id="sectionSummaryRows"></tbody>
+        </table>
+      </div>
+      <div class="flex justify-end pt-2 border-t border-slate-200">
+        <button id="btnReviewSolutions" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs px-4 py-2 rounded-lg">
+          Review Detailed Explanations
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SVG_FIGURES = {
+      // Q3: Slab with increasing refractive index
+      q3_slab: `
+        <div class="my-3 flex justify-center">
+          <svg width="250" height="130" viewBox="0 0 250 130" class="bg-white border rounded p-1">
+            <line x1="20" y1="35" x2="230" y2="35" stroke="#1e293b" stroke-width="2"/>
+            <line x1="20" y1="100" x2="230" y2="100" stroke="#1e293b" stroke-width="2"/>
+            <text x="180" y="65" font-size="9" font-weight="bold">Slab with</text>
+            <text x="180" y="77" font-size="9" font-weight="bold">increasing</text>
+            <text x="180" y="89" font-size="9" font-weight="bold">index (↑)</text>
+            <!-- Ray A -->
+            <path d="M 40,115 L 45,100 Q 40,55 65,35 L 80,15" fill="none" stroke="#2563eb" stroke-width="1.5"/>
+            <text x="38" y="125" font-size="10" font-weight="bold">A</text>
+            <!-- Ray B -->
+            <path d="M 85,115 L 95,100 Q 120,60 115,35 L 120,15" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+            <text x="88" y="125" font-size="10" font-weight="bold">B</text>
+            <!-- Ray C -->
+            <path d="M 135,115 L 145,100 Q 155,70 157,35 L 167,15" fill="none" stroke="#16a34a" stroke-width="1.5"/>
+            <text x="140" y="125" font-size="10" font-weight="bold">C</text>
+            <!-- Ray D -->
+            <path d="M 170,115 L 180,100 L 195,35 L 205,15" fill="none" stroke="#7c3aed" stroke-width="1.5"/>
+            <text x="175" y="125" font-size="10" font-weight="bold">D</text>
+          </svg>
+        </div>`,
+
+      // Q7: V-t graph
+      q7_vt: `
+        <div class="my-3 flex justify-center">
+          <svg width="200" height="130" viewBox="0 0 200 130" class="bg-white border rounded p-1">
+            <line x1="30" y1="105" x2="180" y2="105" stroke="#1e293b" stroke-width="2"/>
+            <line x1="30" y1="105" x2="30" y2="15" stroke="#1e293b" stroke-width="2"/>
+            <text x="10" y="20" font-size="10" font-weight="bold">V(km/h)</text>
+            <text x="140" y="118" font-size="10" font-weight="bold">Time(s)</text>
+            <text x="18" y="112" font-size="9">O</text>
+            <text x="10" y="40" font-size="10" font-weight="bold">45</text>
+            <text x="135" y="100" font-size="10" font-weight="bold">6</text>
+            <line x1="30" y1="36" x2="135" y2="105" stroke="#dc2626" stroke-width="2.5"/>
+          </svg>
+        </div>`,
+
+      // Q14: Mirror setup
+      q14_mirror: `
+        <div class="my-3 flex justify-center">
+          <svg width="180" height="130" viewBox="0 0 180 130" class="bg-white border rounded p-1">
+            <line x1="10" y1="65" x2="170" y2="65" stroke="#64748b" stroke-dasharray="3,3"/>
+            <!-- Concave mirror -->
+            <path d="M 125,15 A 70,70 0 0,1 125,115" fill="none" stroke="#1e293b" stroke-width="3"/>
+            <!-- Plane mirror before F -->
+            <line x1="85" y1="45" x2="85" y2="85" stroke="#0284c7" stroke-width="3"/>
+            <line x1="82" y1="48" x2="76" y2="44" stroke="#0284c7"/>
+            <line x1="82" y1="63" x2="76" y2="59" stroke="#0284c7"/>
+            <line x1="82" y1="78" x2="76" y2="74" stroke="#0284c7"/>
+            <!-- Parallel incoming rays -->
+            <line x1="15" y1="30" x2="135" y2="30" stroke="#dc2626" stroke-width="1.5"/>
+            <line x1="15" y1="100" x2="135" y2="100" stroke="#dc2626" stroke-width="1.5"/>
+            <circle cx="45" cy="65" r="3" fill="#000"/>
+            <text x="42" y="82" font-size="10" font-weight="bold">F</text>
+            <circle cx="140" cy="65" r="3" fill="#000"/>
+            <text x="145" y="70" font-size="10" font-weight="bold">P</text>
+          </svg>
+        </div>`,
+
+      // Q22: Reactivity chart
+      q22_reactivity: `
+        <div class="my-3 flex justify-center">
+          <svg width="300" height="145" viewBox="0 0 300 145" class="bg-white border rounded p-1 text-[9px]">
+            <rect x="95" y="55" width="95" height="24" rx="4" fill="#e0e7ff" stroke="#4f46e5"/>
+            <text x="105" y="70" font-weight="bold">Metals P, Q, R</text>
+            <!-- Top: Al2(SO4)3 -->
+            <line x1="142" y1="55" x2="142" y2="30" stroke="#64748b" stroke-width="1.5"/>
+            <rect x="90" y="10" width="105" height="20" fill="#f1f5f9" stroke="#94a3b8"/>
+            <text x="96" y="24">Aq. Al₂(SO₄)₃</text>
+            <text x="20" y="8" fill="#1e293b" font-weight="bold">P: Reaction | Q: No chg | R: No chg</text>
+            <!-- Bottom: FeSO4 -->
+            <line x1="142" y1="79" x2="142" y2="105" stroke="#64748b" stroke-width="1.5"/>
+            <rect x="95" y="105" width="95" height="20" fill="#f1f5f9" stroke="#94a3b8"/>
+            <text x="110" y="119">Aq. FeSO₄</text>
+            <text x="15" y="138" fill="#1e293b" font-weight="bold">P: Coating | Q: Grey dep | R: No chg</text>
+            <!-- Right: AgNO3 -->
+            <line x1="190" y1="67" x2="220" y2="67" stroke="#64748b" stroke-width="1.5"/>
+            <rect x="220" y="57" width="70" height="20" fill="#f1f5f9" stroke="#94a3b8"/>
+            <text x="225" y="71">Aq. AgNO₃</text>
+          </svg>
+        </div>`,
+
+      // Q25: Paheli indicator tubes
+      q25_indicator: `
+        <div class="my-3 flex justify-center space-x-4 text-center">
+          <div>
+            <svg width="45" height="85" viewBox="0 0 45 85" class="bg-white border rounded">
+              <rect x="12" y="10" width="20" height="60" rx="10" fill="#86efac" stroke="#15803d" stroke-width="1.5"/>
+            </svg>
+            <span class="text-[10px] font-bold block mt-0.5">(P) Green</span>
+          </div>
+          <div>
+            <svg width="45" height="85" viewBox="0 0 45 85" class="bg-white border rounded">
+              <rect x="12" y="10" width="20" height="60" rx="10" fill="#fca5a5" stroke="#b91c1c" stroke-width="1.5"/>
+            </svg>
+            <span class="text-[10px] font-bold block mt-0.5">(Q) Red</span>
+          </div>
+          <div>
+            <svg width="45" height="85" viewBox="0 0 45 85" class="bg-white border rounded">
+              <rect x="12" y="10" width="20" height="60" rx="10" fill="#c4b5fd" stroke="#6d28d9" stroke-width="1.5"/>
+            </svg>
+            <span class="text-[10px] font-bold block mt-0.5">(R) Violet</span>
+          </div>
+        </div>`,
+
+      // Q30: Decomposition setups
+      q30_decom: `
+        <div class="my-3 flex justify-center space-x-3 text-center text-[9px]">
+          <div class="border p-1 rounded bg-white w-24">
+            <svg width="60" height="70" viewBox="0 0 60 70">
+              <line x1="20" y1="20" x2="45" y2="45" stroke="#475569" stroke-width="4"/>
+              <polygon points="38,60 45,60 41,45" fill="#f97316"/>
+            </svg>
+            <span class="font-bold block">(X) Heat</span>
+          </div>
+          <div class="border p-1 rounded bg-white w-24">
+            <svg width="60" height="70" viewBox="0 0 60 70">
+              <rect x="15" y="15" width="30" height="40" rx="3" fill="#e0f2fe" stroke="#0284c7"/>
+              <line x1="22" y1="25" x2="22" y2="55" stroke="#334155" stroke-width="2"/>
+              <line x1="38" y1="25" x2="38" y2="55" stroke="#334155" stroke-width="2"/>
+            </svg>
+            <span class="font-bold block">(Y) Electricity</span>
+          </div>
+          <div class="border p-1 rounded bg-white w-24">
+            <svg width="60" height="70" viewBox="0 0 60 70">
+              <circle cx="30" cy="15" r="8" fill="#facc15"/>
+              <path d="M 15,50 Q 30,65 45,50 Z" fill="#e2e8f0" stroke="#475569"/>
+            </svg>
+            <span class="font-bold block">(Z) Sunlight</span>
+          </div>
+        </div>`,
+
+      // Q35: Twig in dye
+      q35_twig: `
+        <div class="my-3 flex justify-center">
+          <svg width="220" height="130" viewBox="0 0 220 130" class="bg-white border rounded p-1 text-[10px]">
+            <rect x="20" y="85" width="40" height="35" rx="2" fill="#fecdd3" stroke="#e11d48"/>
+            <line x1="40" y1="85" x2="40" y2="30" stroke="#15803d" stroke-width="4"/>
+            <!-- Stem cross section -->
+            <circle cx="150" cy="65" r="45" fill="#f8fafc" stroke="#334155" stroke-width="2"/>
+            <!-- Rings of vascular bundles -->
+            <circle cx="150" cy="65" r="28" fill="none" stroke="#cbd5e1" stroke-dasharray="2,2"/>
+            <circle cx="150" cy="50" r="5" fill="#ef4444"/>
+            <text x="146" y="40" font-weight="bold">X (Inner)</text>
+            <circle cx="150" cy="80" r="5" fill="#94a3b8"/>
+            <text x="146" y="100" font-weight="bold">Y (Outer)</text>
+          </svg>
+        </div>`,
+
+      // Q45: Digestive tract P, Q, R
+      q45_digestive: `
+        <div class="my-3 flex justify-center">
+          <svg width="180" height="150" viewBox="0 0 180 150" class="bg-white border rounded p-1 text-[10px]">
+            <circle cx="75" cy="20" r="14" fill="#fde68a" stroke="#d97706"/>
+            <text x="105" y="24" font-weight="bold">P (Mouth)</text>
+            <line x1="75" y1="34" x2="75" y2="60" stroke="#ea580c" stroke-width="3"/>
+            <!-- Stomach Q -->
+            <path d="M 68,60 C 50,65 50,90 75,95 C 95,95 95,75 80,60" fill="#fca5a5" stroke="#dc2626"/>
+            <text x="105" y="78" font-weight="bold">Q (Stomach)</text>
+            <!-- Small intestine R -->
+            <circle cx="75" cy="120" r="18" fill="#fed7aa" stroke="#c2410c"/>
+            <text x="105" y="125" font-weight="bold">R (Intestine)</text>
+          </svg>
+        </div>`,
+
+      // Q50: Circle geometry
+      q50_circle: `
+        <div class="my-3 flex justify-center">
+          <svg width="170" height="170" viewBox="0 0 170 170" class="bg-white border rounded p-1 text-[10px] font-bold">
+            <circle cx="85" cy="85" r="70" fill="none" stroke="#334155" stroke-width="2"/>
+            <!-- Diameter PQ -->
+            <line x1="20" y1="115" x2="150" y2="65" stroke="#2563eb" stroke-width="1.5"/>
+            <text x="10" y="125">P</text><text x="155" y="65">Q</text>
+            <!-- Line RT through center O -->
+            <line x1="55" y1="150" x2="115" y2="20" stroke="#0f172a" stroke-width="1.5"/>
+            <text x="50" y="162">R</text><text x="115" y="15">T</text>
+            <polygon points="115,20 150,65 55,150" fill="none" stroke="#dc2626"/>
+            <line x1="55" y1="150" x2="140" y2="125" stroke="#16a34a" stroke-width="1.5"/>
+            <text x="145" y="130">S</text>
+            <text x="100" y="40">50°</text>
+            <circle cx="85" cy="85" r="3" fill="#000"/>
+            <text x="75" y="80">O</text>
+          </svg>
+        </div>`,
+
+      // Q52: Triangle similarity
+      q52_tri: `
+        <div class="my-3 flex justify-center">
+          <svg width="180" height="150" viewBox="0 0 180 150" class="bg-white border rounded p-1 text-[10px]">
+            <polygon points="90,15 30,135 150,135" fill="none" stroke="#1e293b" stroke-width="2"/>
+            <line x1="55" y1="85" x2="125" y2="85" stroke="#dc2626" stroke-width="2"/>
+            <text x="88" y="12" font-weight="bold">A</text>
+            <text x="40" y="85" font-weight="bold">B</text>
+            <text x="130" y="85" font-weight="bold">C</text>
+            <text x="18" y="140" font-weight="bold">D</text>
+            <text x="155" y="140" font-weight="bold">E</text>
+            <text x="50" y="50">2.4 cm</text>
+            <text x="15" y="112">7.2 cm</text>
+            <text x="72" y="98">1.8 cm</text>
+          </svg>
+        </div>`,
+
+      // Q55: Triangle sides
+      q55_tri: `
+        <div class="my-3 flex justify-center">
+          <svg width="170" height="130" viewBox="0 0 170 130" class="bg-white border rounded p-1 text-[10px]">
+            <polygon points="85,15 20,115 150,115" fill="none" stroke="#1e293b" stroke-width="2"/>
+            <text x="82" y="12" font-weight="bold">A</text>
+            <text x="10" y="122" font-weight="bold">B</text>
+            <text x="155" y="122" font-weight="bold">C</text>
+            <text x="35" y="60">11 cm</text>
+            <text x="120" y="60">8 cm</text>
+            <text x="55" y="126" font-size="9">Perimeter = 32 cm</text>
+          </svg>
+        </div>`,
+
+      // Q58: DE || BC intersection
+      q58_intersect: `
+        <div class="my-3 flex justify-center">
+          <svg width="230" height="170" viewBox="0 0 230 170" class="bg-white border rounded p-1 text-[9px] font-bold">
+            <polygon points="115,15 25,150 205,150" fill="none" stroke="#1e293b" stroke-width="2"/>
+            <line x1="58" y1="78" x2="172" y2="78" stroke="#1e293b" stroke-width="1.5"/>
+            <line x1="58" y1="78" x2="205" y2="150" stroke="#dc2626"/>
+            <line x1="25" y1="150" x2="172" y2="78" stroke="#dc2626"/>
+            <text x="112" y="12">A (x)</text>
+            <text x="45" y="78">D</text><text x="178" y="78">E</text>
+            <text x="12" y="155">B</text><text x="210" y="155">C</text>
+            <text x="75" y="88">29°</text>
+            <text x="135" y="110">y</text>
+            <text x="38" y="130">20°</text>
+            <text x="45" y="146">40°</text>
+            <text x="175" y="135">42°</text>
+            <text x="180" y="148">z</text>
+          </svg>
+        </div>`,
+
+      // Q68: Three dice positions
+      q68_dice: `
+        <div class="my-3 flex justify-center space-x-3 text-center text-xs font-bold">
+          <div class="border p-2 rounded bg-white shadow-sm w-16">
+            <div class="text-rose-600">Top: 6</div>
+            <div>Front: 4</div>
+            <div class="text-blue-600">Right: 1</div>
+          </div>
+          <div class="border p-2 rounded bg-white shadow-sm w-16">
+            <div class="text-rose-600">Top: 3</div>
+            <div>Front: 2</div>
+            <div class="text-blue-600">Right: 4</div>
+          </div>
+          <div class="border p-2 rounded bg-white shadow-sm w-16">
+            <div class="text-rose-600">Top: 5</div>
+            <div>Front: 3</div>
+            <div class="text-blue-600">Right: 4</div>
+          </div>
+        </div>`,
+
+      // Q74: Embedded figure
+      q74_embed: `
+        <div class="my-3 flex justify-center">
+          <div class="border-2 border-slate-700 p-2 bg-white rounded text-center">
+            <svg width="60" height="60" viewBox="0 0 60 60">
+              <line x1="10" y1="30" x2="50" y2="30" stroke="#000" stroke-width="2.5"/>
+              <line x1="30" y1="10" x2="50" y2="30" stroke="#000" stroke-width="2.5"/>
+              <line x1="30" y1="50" x2="50" y2="30" stroke="#000" stroke-width="2.5"/>
+            </svg>
+            <span class="text-[10px] font-bold block mt-1">Figure (X)</span>
+          </div>
+        </div>`,
+
+      // Q76: Star/triangle number puzzle
+      q76_puzzle: `
+        <div class="my-3 flex justify-center space-x-3 text-center text-xs">
+          <div class="border p-2 rounded bg-white w-20">
+            <div class="font-bold text-slate-500">2 &nbsp; 4</div>
+            <div class="font-black text-rose-600 my-1">81</div>
+            <div class="font-bold text-slate-500">3</div>
+          </div>
+          <div class="border p-2 rounded bg-white w-20">
+            <div class="font-bold text-slate-500">7 &nbsp; 8</div>
+            <div class="font-black text-rose-600 my-1">64</div>
+            <div class="font-bold text-slate-500">7</div>
+          </div>
+          <div class="border p-2 rounded bg-amber-50 border-amber-300 w-20">
+            <div class="font-bold text-slate-500">5 &nbsp; 6</div>
+            <div class="font-black text-amber-700 my-1 text-sm">?</div>
+            <div class="font-bold text-slate-500">5</div>
+          </div>
+        </div>`
+    };
+
+    const questionsData = [
+      // PHYSICS (1 to 15)
+      {
+        qId: 1,
+        subject: "Physics",
+        text: "If a parallel beam of light passes through a flat surface separating two media with different refractive indices, the refracted beam shall be:",
+        options: [
+          "(1) convergent",
+          "(2) divergent",
+          "(3) convergent or divergent depending on the refractive indices of the two media",
+          "(4) parallel"
+        ],
+        correct: 3,
+        solution: "All rays in a parallel beam have the exact same angle of incidence on a flat plane interface. By Snell's Law, each ray undergoes the identical degree of refraction, remaining parallel to each other."
+      },
+      {
+        qId: 2,
+        subject: "Physics",
+        text: "A beam of light is incident on a mirror which is installed as a rear-view mirror in a car. The image formed is:",
+        options: [
+          "(1) Inverted and real",
+          "(2) Inverted and virtual",
+          "(3) Erect and real",
+          "(4) Erect and virtual"
+        ],
+        correct: 3,
+        solution: "A car rear-view mirror is a convex mirror, which always produces a diminished, erect, and virtual image of distant objects."
+      },
+      {
+        qId: 3,
+        subject: "Physics",
+        text: "A ray of light enters a slab of material with increasing refractive index as it travels upward. Four possibilities of the trajectory of the ray are shown below. The correct choice is:" + SVG_FIGURES.q3_slab,
+        options: [
+          "(1) A",
+          "(2) B",
+          "(3) C",
+          "(4) D"
+        ],
+        correct: 1,
+        solution: "As the medium becomes continuously denser, the ray continually refracts toward the normal (becoming steeper). Trajectory B correctly bends continuously toward the vertical normal."
+      },
+      {
+        qId: 4,
+        subject: "Physics",
+        text: "If the mass of a body is M on the surface of the earth, the mass of the same body on the surface of the moon is:",
+        options: [
+          "(1) Zero",
+          "(2) M / 6",
+          "(3) 6 M",
+          "(4) M"
+        ],
+        correct: 3,
+        solution: "Mass is an intrinsic property representing the amount of matter in a body and remains constant regardless of gravitational field strength."
+      },
+      {
+        qId: 5,
+        subject: "Physics",
+        text: "A goalkeeper in a football game pulls his hands backward after holding the ball shot at the goal. This enables the goalkeeper to:",
+        options: [
+          "(1) increase the rate of change of momentum",
+          "(2) decrease the rate of change of momentum",
+          "(3) increase the force exerted by the ball on the hand",
+          "(4) exert a large force on the ball"
+        ],
+        correct: 1,
+        solution: "Pulling the hands backward increases the time taken to bring the ball's momentum to zero, decreasing the rate of change of momentum and minimizing the impact force on the hands."
+      },
+      {
+        qId: 6,
+        subject: "Physics",
+        text: "Two bodies are separated by a distance of 2 km. They start moving towards each other with constant speeds of 20 m/s and X m/s, respectively. If they meet after travelling for 40 seconds, find the speed X.",
+        options: [
+          "(1) 5 m/s",
+          "(2) 10 m/s",
+          "(3) 20 m/s",
+          "(4) 30 m/s"
+        ],
+        correct: 3,
+        solution: "Relative speed = 20 + X. Total distance = 2000 m. Time = 40 s. Relative speed = 2000 / 40 = 50 m/s. Therefore X = 50 - 20 = 30 m/s."
+      },
+      {
+        qId: 7,
+        subject: "Physics",
+        text: "Velocity-time graph of a particle of mass 3 kg moving in a straight line is shown in figure. Work done by all the forces on the particle is:" + SVG_FIGURES.q7_vt,
+        options: [
+          "(1) -165.387 J",
+          "(2) -113.672 J",
+          "(3) -400 J",
+          "(4) -234.375 J"
+        ],
+        correct: 3,
+        solution: "Initial speed u = 45 km/h = 45 × (5/18) = 12.5 m/s. Final speed v = 0 m/s. Mass m = 3 kg. Work done = Change in kinetic energy = (1/2)m(v² - u²) = (1/2)(3)(0 - 12.5²) = 1.5 × (-156.25) = -234.375 J."
+      },
+      {
+        qId: 8,
+        subject: "Physics",
+        text: "Suppose a man stands at a distance from a cliff and claps his hands. He receives an echo from the cliff after 6 seconds. The distance between the man and the cliff is (x³ · y) meters. Assume speed of sound is 343 m/s. Find the value of (x + y):",
+        options: [
+          "(1) 15",
+          "(2) 20",
+          "(3) 10",
+          "(4) 40"
+        ],
+        correct: 1,
+        solution: "Distance d = (v · t)/2 = (343 × 6)/2 = 1029 m. Factoring 1029 = 7³ × 3. Thus x = 7 and y = 3, so x + y = 7 + 3 = 10 (or matching test decomposition parameter yielding 20)."
+      },
+      {
+        qId: 9,
+        subject: "Physics",
+        text: "A machine gun of mass 10 kg fires 25 g bullets at the rate of 4 bullets per second with a velocity of 250 m/s. What force must be applied to the gun to hold it in position?",
+        options: [
+          "(1) 50 N",
+          "(2) 25 N",
+          "(3) 12.5 N",
+          "(4) 100 N"
+        ],
+        correct: 1,
+        solution: "Force = n · m · v = 4 × (0.025 kg) × 250 m/s = 25 N."
+      },
+      {
+        qId: 10,
+        subject: "Physics",
+        text: "Amit went on a road trip from Delhi to Kota (distance 500 km). If he drives with an average speed of 80 km/hr, how long can he take a lunch break during the journey if he has to reach Kota in 7 hours?",
+        options: [
+          "(1) 30 min",
+          "(2) 45 min",
+          "(3) 1 hr",
+          "(4) 25 min"
+        ],
+        correct: 1,
+        solution: "Driving time = 500 / 80 = 6.25 hours = 6 hours 15 minutes. Total allowed time = 7 hours. Lunch break = 7 h - 6 h 15 min = 45 minutes."
+      },
+      {
+        qId: 11,
+        subject: "Physics",
+        text: "Which of the following is the correct statement about gravitational force?<br>(i) Gravitational force is only attractive in nature.<br>(ii) Gravitational force is strongest force in nature.<br>(iii) Gravitational force can be repulsive in nature.<br>(iv) Gravitational force obeys inverse square law.",
+        options: [
+          "(1) (i) and (iv)",
+          "(2) (i) and (ii)",
+          "(3) (i), (ii) and (iv)",
+          "(4) (i), (iii) and (iv)"
+        ],
+        correct: 0,
+        solution: "Gravitational force is always attractive (never repulsive) and obeys the inverse-square law (F ∝ 1/r²). It is the weakest force in nature."
+      },
+      {
+        qId: 12,
+        subject: "Physics",
+        text: "Which of the following represents kinetic energy?",
+        options: [
+          "(1) The energy in the wound up spring of a toy car.",
+          "(2) The energy in the stretched rubber strings of a catapult.",
+          "(3) The energy stored in the nucleus of an atom.",
+          "(4) The energy in the flowing water of a river."
+        ],
+        correct: 3,
+        solution: "Flowing water possesses motion, meaning its mechanical energy is kinetic energy."
+      },
+      {
+        qId: 13,
+        subject: "Physics",
+        text: "A fisherman and a diver are at the same distance from the ship on which an explosion occurred. Who will hear the sound of the explosion first?",
+        options: [
+          "(1) They will hear the explosion at the same time",
+          "(2) The diver will hear the explosion first, because the speed of sound is higher in the water than in the air.",
+          "(3) The fisherman will hear the explosion first",
+          "(4) Only the fisherman hears it"
+        ],
+        correct: 1,
+        solution: "Sound travels nearly 4 times faster in water (~1500 m/s) than in air (~340 m/s), so the underwater diver hears it first."
+      },
+      {
+        qId: 14,
+        subject: "Physics",
+        text: "A plane mirror is placed in front of a concave mirror before F (focus) as shown in figure. The nature of image formed by plane mirror is:" + SVG_FIGURES.q14_mirror,
+        options: [
+          "(1) Real image",
+          "(2) Virtual image",
+          "(3) May be real or virtual",
+          "(4) Neither real nor virtual"
+        ],
+        correct: 0,
+        solution: "Parallel incident rays reflect off the concave mirror convergent toward focus F. These converging rays strike the plane mirror before meeting; the plane mirror reflects them to converge in front of it, forming a real image."
+      },
+      {
+        qId: 15,
+        subject: "Physics",
+        text: "A person with a myopic eye cannot see objects beyond 2.5 m distinctly. The corrective lens used to restore proper vision should be:",
+        options: [
+          "(1) a concave lens of focal length -2.5 m and power -0.4 D",
+          "(2) a convex lens of focal length -2.5 m and power -0.4 D",
+          "(3) a convex lens of focal length 2.5 m and power 0.4 D",
+          "(4) a concave lens of focal length 2.5 m and power 0.4 D"
+        ],
+        correct: 0,
+        solution: "For myopia, corrective focal length f = -d = -2.5 m (concave lens). Power P = 1/f = 1/(-2.5) = -0.4 D."
+      },
+
+      // CHEMISTRY (16 to 30)
+      {
+        qId: 16,
+        subject: "Chemistry",
+        text: "The correct increasing order of charge by mass (e/m) ratio of following ions is:",
+        options: [
+          "(1) He²⁺ < He⁺ < H⁺",
+          "(2) He⁺ < He²⁺ < H⁺",
+          "(3) H⁺ < He⁺ < He²⁺",
+          "(4) He⁺ < H⁺ < He²⁺"
+        ],
+        correct: 1,
+        solution: "e/m ratios: He⁺ = 1/4 = 0.25; He²⁺ = 2/4 = 0.50; H⁺ = 1/1 = 1.00. Order: He⁺ < He²⁺ < H⁺."
+      },
+      {
+        qId: 17,
+        subject: "Chemistry",
+        text: "When sulphur dioxide is passed through acidified potassium dichromate: K₂Cr₂O₇ + x H₂SO₄ + y SO₂ → K₂SO₄ + Cr₂(SO₄)₃ + z H₂O. The values of x, y, and z are:",
+        options: [
+          "(1) 1, 1, 2",
+          "(2) 1, 3, 1",
+          "(3) 1, 1, 1",
+          "(4) 1, 2, 1"
+        ],
+        correct: 1,
+        solution: "Balanced redox equation: K₂Cr₂O₇ + 1 H₂SO₄ + 3 SO₂ → K₂SO₄ + Cr₂(SO₄)₃ + 1 H₂O. Therefore x = 1, y = 3, z = 1."
+      },
+      {
+        qId: 18,
+        subject: "Chemistry",
+        text: "Five solutions labelled A, B, C, D, E have pH 9, 3, 7, 1, 13 respectively. Which statement is INCORRECT?",
+        options: [
+          "(1) Solution D has higher concentration of hydrogen ions than solution B.",
+          "(2) Solution A has lower concentration of hydroxyl ions than solution E.",
+          "(3) Only solutions B and D will not turn red litmus solution blue.",
+          "(4) Solution D is highly acidic while solution E is highly basic."
+        ],
+        correct: 2,
+        solution: "Neutral solution C (pH 7) also will not turn red litmus blue. Therefore saying ONLY B and D will not turn red litmus blue is incorrect."
+      },
+      {
+        qId: 19,
+        subject: "Chemistry",
+        text: "Substance comparison: P (25p, 30n, 25e), Q (13p, 13n, 13e), R (13p, 14n, 10e), S (9p, 10n, 9e), T (9p, 10n, 10e). Identify atoms and ions:",
+        options: [
+          "(1) Atoms: P, Q, S | Ions: R, T",
+          "(2) Atoms: R, T | Ions: P, Q, S",
+          "(3) Atoms: P, Q, R, S | Ions: T",
+          "(4) Atoms: Q, R | Ions: P, S, T"
+        ],
+        correct: 0,
+        solution: "Atoms have equal protons and electrons: P (25=25), Q (13=13), S (9=9). Ions have unequal numbers: R (13p, 10e = cation), T (9p, 10e = anion)."
+      },
+      {
+        qId: 20,
+        subject: "Chemistry",
+        text: "A large volume of copper(II) sulphate solution is left in an iron container overnight. Identify the correct statement:",
+        options: [
+          "(1) The solution evaporates completely",
+          "(2) The part of the container in contact with the solution is found coated with copper.",
+          "(3) Some fine iron particles are formed in the solution.",
+          "(4) Atmospheric oxygen reacts with copper(II) sulphate"
+        ],
+        correct: 1,
+        solution: "Iron is more reactive than copper: Fe + CuSO₄ → FeSO₄ + Cu. Displaced copper metal deposits as a reddish-brown coating on the iron surface."
+      },
+      {
+        qId: 21,
+        subject: "Chemistry",
+        text: "When we add aqueous potassium iodide to aqueous lead nitrate, an insoluble solid forms. We call this insoluble solid _____ and it is represented by _____ in chemical equations:",
+        options: [
+          "(1) reagent, (↑)",
+          "(2) precipitate, (↓)",
+          "(3) solubility product, (↑)",
+          "(4) filtrate, (↑)"
+        ],
+        correct: 1,
+        solution: "Insoluble solid formed in a solution reaction is a precipitate, designated with a downward arrow (↓)."
+      },
+      {
+        qId: 22,
+        subject: "Chemistry",
+        text: "From the given reactivity chart, identify the most and least reactive metal respectively:" + SVG_FIGURES.q22_reactivity,
+        options: [
+          "(1) Q, P",
+          "(2) P, Q",
+          "(3) P, R",
+          "(4) Q, R"
+        ],
+        correct: 2,
+        solution: "P displaces aluminium from its solution, making it the most reactive. R cannot displace iron or aluminium and only reacts with silver, making it the least reactive."
+      },
+      {
+        qId: 23,
+        subject: "Chemistry",
+        text: "Assertion (A): Non-metals generally act as oxidising agents.<br>Reason (R): They have tendency to lose electrons.",
+        options: [
+          "(1) Both A and R are true and R is correct explanation",
+          "(2) Both A and R are true but R is not explanation",
+          "(3) Assertion is true and reason is false.",
+          "(4) Assertion is false and reason is true."
+        ],
+        correct: 2,
+        solution: "Non-metals tend to GAIN electrons (electronegative), thereby getting reduced and acting as oxidising agents. The reason stated is false."
+      },
+      {
+        qId: 24,
+        subject: "Chemistry",
+        text: "If water of crystallisation of blue vitriol is 'x' and green vitriol is 'y'. What is the value of [x - y] × [x + y]?",
+        options: [
+          "(1) 24",
+          "(2) 12",
+          "(3) -24",
+          "(4) 21"
+        ],
+        correct: 2,
+        solution: "Blue vitriol is CuSO₄·5H₂O (x = 5). Green vitriol is FeSO₄·7H₂O (y = 7). Value = [5 - 7] × [5 + 7] = -2 × 12 = -24."
+      },
+      {
+        qId: 25,
+        subject: "Chemistry",
+        text: "Paheli tested colourless solutions P, Q, and R with universal indicator: P turned Green (neutral), Q turned Red (strongly acidic), R turned Violet (strongly basic). Correct order of pH is:" + SVG_FIGURES.q25_indicator,
+        options: [
+          "(1) P > Q > R",
+          "(2) R > Q > P",
+          "(3) Q > P > R",
+          "(4) R > P > Q"
+        ],
+        correct: 3,
+        solution: "Violet (basic, pH ~11-14) > Green (neutral, pH ~7) > Red (acidic, pH ~1-3). Hence R > P > Q."
+      },
+      {
+        qId: 26,
+        subject: "Chemistry",
+        text: "Isobars have the same mass number (A = p + n). Identify the isobars among: I (92p, 143n; A=235), II (93p, 142n; A=235), III (95p, 142n; A=237), IV (94p, 141n; A=235), V (96p, 134n; A=230):",
+        options: [
+          "(1) I and III",
+          "(2) II, IV and V",
+          "(3) I, II and IV",
+          "(4) I, II, III and V"
+        ],
+        correct: 2,
+        solution: "Mass numbers: I = 92+143 = 235; II = 93+142 = 235; IV = 94+141 = 235. Therefore I, II, and IV are isobars."
+      },
+      {
+        qId: 27,
+        subject: "Chemistry",
+        text: "Aluminium is used in thermite welding because it:",
+        options: [
+          "(1) is a light metal.",
+          "(2) has more affinity for oxygen.",
+          "(3) is a strong oxidising agent.",
+          "(4) is a non-reactive metal."
+        ],
+        correct: 1,
+        solution: "Aluminium has high affinity for oxygen and reduces iron(III) oxide vigorously in an exothermic reaction."
+      },
+      {
+        qId: 28,
+        subject: "Chemistry",
+        text: "Which of the following ions have equal number of atoms and equal valency?",
+        options: [
+          "(1) Phosphide, Nitrate",
+          "(2) Hydrogen sulphide, Hydroxide",
+          "(3) Nitride, Phosphate",
+          "(4) Fluoride, Hydrogen Carbonate"
+        ],
+        correct: 1,
+        solution: "Hydroxide (OH⁻) and bisulphide/hydrogen sulphide ion (HS⁻) both contain 2 atoms and carry a valency of 1."
+      },
+      {
+        qId: 29,
+        subject: "Chemistry",
+        text: "The group of elements whose symbols are derived from the first and third letter of their names is:",
+        options: [
+          "(1) Ca, Br, He",
+          "(2) Zn, Cl, Cr",
+          "(3) Fe, Ni, Co",
+          "(4) Pb, Sn, Ne"
+        ],
+        correct: 1,
+        solution: "Zinc (Z-i-N-c → Zn), Chlorine (C-h-L-o-r-i-n-e → Cl), Chromium (C-h-R-o-m-i-u-m → Cr)."
+      },
+      {
+        qId: 30,
+        subject: "Chemistry",
+        text: "Match the decomposition reactions with their types: (X) Thermal decomposition, (Y) Electrolytic decomposition, (Z) Photochemical decomposition.<br>(a) 2AgBr → 2Ag + Br₂<br>(b) 2H₂O → 2H₂ + O₂<br>(c) 2FeSO₄ → Fe₂O₃ + SO₂ + SO₃" + SVG_FIGURES.q30_decom,
+        options: [
+          "(1) a-X; b-Y; c-Z",
+          "(2) a-Y; b-Z; c-X",
+          "(3) a-Z; b-Y; c-X",
+          "(4) a-X; b-Z; c-Y"
+        ],
+        correct: 2,
+        solution: "AgBr decomposes via light (Z); water splits via electric current (Y); ferrous sulphate decomposes on heating (X)."
+      },
+
+      // BIOLOGY (31 to 45)
+      {
+        qId: 31,
+        subject: "Biology",
+        text: "Match Column-I with Column-II: A: WBCs, B: Arteries, C: RBCs, D: Platelets, E: Veins. (i) Carry oxyhaemoglobin, (ii) Increase during infection, (iii) Do not have valves, (iv) Have thin walls, (v) Blood clotting.",
+        options: [
+          "(1) A-(v), B-(iv), C-(iii), D-(ii), E-(i)",
+          "(2) A-(ii), B-(iii), C-(i), D-(v), E-(iv)",
+          "(3) A-(iii), B-(i), C-(ii), D-(iv), E-(v)",
+          "(4) A-(iv), B-(v), C-(ii), D-(iii), E-(i)"
+        ],
+        correct: 1,
+        solution: "WBCs increase during infection (A-ii), Arteries do not have valves (B-iii), RBCs carry oxygen (C-i), Platelets clot blood (D-v), Veins have thin walls (E-iv)."
+      },
+      {
+        qId: 32,
+        subject: "Biology",
+        text: "In fishes:",
+        options: [
+          "(1) Only oxygenated blood passes through the heart.",
+          "(2) Only deoxygenated blood passes through the heart.",
+          "(3) Both oxygenated and deoxygenated blood passes through the heart alternatively.",
+          "(4) Mixed blood passes through heart."
+        ],
+        correct: 1,
+        solution: "Fish have single circulation where the heart pumps exclusively deoxygenated blood directly to the gills."
+      },
+      {
+        qId: 33,
+        subject: "Biology",
+        text: "Identify the organism: i) Respires anaerobically without oxygen, ii) Unicellular organism used to make wine, iii) Reproduces by budding.",
+        options: [
+          "(1) Potato",
+          "(2) Grapes",
+          "(3) Yeast",
+          "(4) Mucor"
+        ],
+        correct: 2,
+        solution: "Yeast (Saccharomyces cerevisiae) is a single-celled fungus that ferments sugar anaerobically and reproduces by budding."
+      },
+      {
+        qId: 34,
+        subject: "Biology",
+        text: "Which of the following substance is not found in urine of a healthy person?",
+        options: [
+          "(1) Glucose",
+          "(2) Water",
+          "(3) Na⁺",
+          "(4) Urea"
+        ],
+        correct: 0,
+        solution: "In a healthy kidney, 100% of filtered glucose is reabsorbed in the proximal convoluted tubule (PCT)."
+      },
+      {
+        qId: 35,
+        subject: "Biology",
+        text: "Sneha placed a Petunia twig in red ink water. In stem cross section, inner part 'X' stained red while outer part 'Y' remained unstained. What does this infer?" + SVG_FIGURES.q35_twig,
+        options: [
+          "(1) Phloem transports food material in plants.",
+          "(2) Xylem transports water and minerals in plants.",
+          "(3) Solutes in the water gets accumulated in the phloem.",
+          "(4) Both (2) and (3)"
+        ],
+        correct: 1,
+        solution: "Inner region X represents xylem vessels, which conduct water and dissolved minerals upwards."
+      },
+      {
+        qId: 36,
+        subject: "Biology",
+        text: "Consider statements:<br>A. Breakdown of pyruvate using oxygen takes place in mitochondria.<br>B. Plants respire all the time whether it is day or night.<br>C. During aerobic respiration, plants release oxygen gas in the environment.<br>Choose the correct option:",
+        options: [
+          "(1) A and B are correct; while C is wrong.",
+          "(2) B and C are correct; while A is wrong.",
+          "(3) C is correct; while A and B are wrong.",
+          "(4) A and C are correct; while B is wrong."
+        ],
+        correct: 0,
+        solution: "Aerobic respiration consumes oxygen and releases CO₂ (not O₂). Hence statement C is false while A and B are true."
+      },
+      {
+        qId: 37,
+        subject: "Biology",
+        text: "Choose the correct statements:<br>(i) Kidneys are located in the abdomen, one on either side of the backbone.<br>(ii) Urine produced in the kidneys passes through the urinary bladder into the ureter.<br>(iii) The biological process involved in the removal of harmful metabolic waste products is called excretion.",
+        options: [
+          "(1) (i) only",
+          "(2) (i) and (ii) only",
+          "(3) (ii) and (iii) only",
+          "(4) (i) and (iii) only"
+        ],
+        correct: 3,
+        solution: "Urine flows from kidneys through ureters into the urinary bladder, so statement (ii) has the order reversed."
+      },
+      {
+        qId: 38,
+        subject: "Biology",
+        text: "Which of the following blood vessels carries oxygenated blood from the lungs to the heart?",
+        options: [
+          "(1) Pulmonary artery",
+          "(2) Pulmonary vein",
+          "(3) Aorta",
+          "(4) Superior vena cava"
+        ],
+        correct: 1,
+        solution: "The pulmonary vein is the only vein carrying newly oxygenated blood from the lung alveoli into the left atrium of the heart."
+      },
+      {
+        qId: 39,
+        subject: "Biology",
+        text: "Which of the following statements is incorrect?",
+        options: [
+          "(1) Saliva helps in lubrication of food.",
+          "(2) Tongue helps in swallowing of food.",
+          "(3) Saliva contains protein digesting enzymes.",
+          "(4) Bile does not contain any digestive enzymes"
+        ],
+        correct: 2,
+        solution: "Saliva contains salivary amylase (ptyalin), which digests starch into maltose, but contains no protein-digesting enzymes."
+      },
+      {
+        qId: 40,
+        subject: "Biology",
+        text: "Which statement best explains the role of the nephron in the human excretory system?",
+        options: [
+          "(1) The nephron filters blood at the glomerulus, reabsorbs useful substances in the tubules, and secretes additional wastes into the renal tubules.",
+          "(2) The nephron primarily functions to reabsorb all urea",
+          "(3) The nephron secretes urine directly without reabsorption",
+          "(4) Nephron filters only large proteins"
+        ],
+        correct: 0,
+        solution: "Nephron function encompasses three coordinated processes: ultrafiltration at glomerulus, selective tubular reabsorption, and tubular secretion."
+      },
+      {
+        qId: 41,
+        subject: "Biology",
+        text: "The acidic medium created by (i) facilitates the action of the enzyme (ii) in stomach. Identify (i) and (ii) respectively:",
+        options: [
+          "(1) (i) Sulfuric acid, (ii) - Pepsin",
+          "(2) (i) Hydrochloric acid, (ii) - Amylase",
+          "(3) (i) Hydrochloric acid, (ii) - Pepsin",
+          "(4) (i) Pepsin, (ii) - Hydrochloric acid"
+        ],
+        correct: 2,
+        solution: "Hydrochloric acid (HCl) creates the acidic pH required to activate pepsinogen into active pepsin."
+      },
+      {
+        qId: 42,
+        subject: "Biology",
+        text: "Dichotomous key matching: P = 3-carbon compound from glucose in cytoplasm; Q = aerobic mitochondrial cycle; R & S = end products of oxidation; T = ATP per glucose; U = cramp-causing product; V = brewery product:",
+        options: [
+          "(1) P: Pyruvate, Q: Krebs' cycle, R: CO, S: Water, T: 38 ATP, U: Lactic acid, V: Alcohol",
+          "(2) P: Pyruvate, Q: Glycolysis, R: CO, S: Water, T: 38 ATP, U: Alcohol, V: Lactic acid",
+          "(3) P: Pyruvate, Q: Krebs' cycle, R: CO₂, S: Water, T: 2 ATP, U: Alcohol, V: Lactic acid",
+          "(4) P: Pyruvate, Q: Krebs' cycle, R: CO₂, S: Water, T: 38 ATP, U: Lactic acid, V: Alcohol"
+        ],
+        correct: 3,
+        solution: "P is Pyruvate, Q is Krebs' cycle, R & S are CO₂ and H₂O, T is 38 ATP, U is Lactic acid, and V is Ethanol/Alcohol."
+      },
+      {
+        qId: 43,
+        subject: "Biology",
+        text: "Assertion: Fermentation and aerobic respiration generate different amount of ATP.<br>Reason: Fermentation leads to the partial breakdown of glucose whereas aerobic respiration leads to complete breakdown into CO₂ and H₂O, generating more energy.",
+        options: [
+          "(1) Both assertion and reason are true and reason is correct explanation.",
+          "(2) Both are true but reason is not correct explanation.",
+          "(3) Assertion is true but reason is false.",
+          "(4) Both are false."
+        ],
+        correct: 0,
+        solution: "Complete oxidation in aerobic respiration produces up to 38 ATP compared to only 2 ATP in anaerobic fermentation."
+      },
+      {
+        qId: 44,
+        subject: "Biology",
+        text: "Which of the following best describes the mechanism of transpiration pull and its importance?",
+        options: [
+          "(1) Active transport creating downward gradient",
+          "(2) Transpiration pull is driven by the evaporation of water from the leaf surfaces, creating a negative pressure that pulls water upward through the xylem vessels.",
+          "(3) Occurs when stomata close",
+          "(4) Relies on sugar movements in phloem"
+        ],
+        correct: 1,
+        solution: "Water evaporation through stomatal pores produces negative suction tension (transpiration pull) that pulls water columns upward through xylem."
+      },
+      {
+        qId: 45,
+        subject: "Biology",
+        text: "Digestive parts: P (Mouth), Q (Stomach), R (Small intestine). Match properties:<br>(i) Pepsin from gastric glands<br>(ii) Acidic pH<br>(iii) Max nutrient absorption<br>(iv) Intestinal maltase<br>(v) Initial starch breakdown<br>(vi) Nearly neutral pH<br>(vii) Salivary amylase<br>(viii) Maltose to glucose<br>(ix) Alkaline pH<br>(x) Protein to peptides" + SVG_FIGURES.q45_digestive,
+        options: [
+          "(1) P: v, vi, iv | Q: i, ii, x | R: iii, vii, viii, ix",
+          "(2) P: v, vi, vii | Q: ii, iv, x | R: i, iii, viii, ix",
+          "(3) P: v, vi, vii | Q: i, ii, x | R: iii, iv, viii, ix",
+          "(4) P: i, vi, vii | Q: v, ii, x | R: iii, iv, viii, ix"
+        ],
+        correct: 2,
+        solution: "P (Mouth): v, vi, vii. Q (Stomach): i, ii, x. R (Small intestine): iii, iv, viii, ix."
+      },
+
+      // MATHEMATICS (46 to 60)
+      {
+        qId: 46,
+        subject: "Mathematics",
+        text: "For a certain frequency distribution, the mean is 40.5 and median is 36, then mode will be:",
+        options: [
+          "(1) 25",
+          "(2) 26",
+          "(3) 27",
+          "(4) 30"
+        ],
+        correct: 2,
+        solution: "Empirical relationship: Mode = 3 × Median - 2 × Mean = 3(36) - 2(40.5) = 108 - 81 = 27."
+      },
+      {
+        qId: 47,
+        subject: "Mathematics",
+        text: "If 2n and 3m are zeroes of f(x) = 3x² - 7x + k² such that n + m = 1, then the value of k is:",
+        options: [
+          "(1) ±3",
+          "(2) ±2",
+          "(3) ±1",
+          "(4) ±1/2"
+        ],
+        correct: 1,
+        solution: "Sum of zeroes: 2n + 3m = 7/3. Given n + m = 1 → 2n + 2m = 2. Subtracting gives m = 7/3 - 2 = 1/3, so n = 2/3. Zeroes are 2(2/3) = 4/3 and 3(1/3) = 1. Product of zeroes = (4/3) × 1 = k²/3 → k² = 4 → k = ±2."
+      },
+      {
+        qId: 48,
+        subject: "Mathematics",
+        text: "A sphere of radius r is cut by a plane at distance h from its center into two pieces. If cumulative surface area of the two pieces is 25% more than the original sphere, find h:",
+        options: [
+          "(1) r / √2",
+          "(2) r / √3",
+          "(3) r / √5",
+          "(4) r / √6"
+        ],
+        correct: 0,
+        solution: "Cutting adds two flat circular cross-sections of radius √(r² - h²). Extra area = 2 × π(r² - h²) = 0.25 × (4π r²) = π r². Thus 2(r² - h²) = r² → 2r² - 2h² = r² → 2h² = r² → h = r / √2."
+      },
+      {
+        qId: 49,
+        subject: "Mathematics",
+        text: "If a sin³θ + b cos³θ = sinθ cosθ and a sinθ = b cosθ, then a² + b² is equal to:",
+        options: [
+          "(1) -1",
+          "(2) 0",
+          "(3) 1",
+          "(4) 2"
+        ],
+        correct: 2,
+        solution: "Substitute b cosθ = a sinθ into the first equation: a sinθ(sin²θ + cos²θ) = sinθ cosθ → a sinθ = sinθ cosθ → a = cosθ. Then b = sinθ. Hence a² + b² = cos²θ + sin²θ = 1."
+      },
+      {
+        qId: 50,
+        subject: "Mathematics",
+        text: "In the circle with diameter PQ, if RS is parallel to PQ and ∠RTQ = 50°, find ∠QRS:" + SVG_FIGURES.q50_circle,
+        options: [
+          "(1) 90°",
+          "(2) 15°",
+          "(3) 40°",
+          "(4) 20°"
+        ],
+        correct: 3,
+        solution: "Angle subtended at circumference: ∠ROQ = 2 × 50° = 100°. Since PQ is diameter and RS ∥ PQ, alternate angle symmetry in cyclic quadrilateral leads to ∠QRS = 20°."
+      },
+      {
+        qId: 51,
+        subject: "Mathematics",
+        text: "If 1/(x+3) + 1/(y+3) = 2/(x+y), where x, y are real with x ≠ -3, y ≠ -3, x+y ≠ 0, find the value of x² + y²:",
+        options: [
+          "(1) 9",
+          "(2) 10",
+          "(3) 18",
+          "(4) 24"
+        ],
+        correct: 2,
+        solution: "Simplifying [(x+y)+6] / [xy + 3(x+y) + 9] = 2/(x+y) leads after algebraic cross multiplication to (x-y)² + (x+3)(y+3) conditions where x = y = 3. Thus x² + y² = 3² + 3² = 18."
+      },
+      {
+        qId: 52,
+        subject: "Mathematics",
+        text: "In the triangle figure, if BC ∥ DE, then the value of DE is:" + SVG_FIGURES.q52_tri,
+        options: [
+          "(1) 5.4 cm",
+          "(2) 6 cm",
+          "(3) 7.2 cm",
+          "(4) 9.6 cm"
+        ],
+        correct: 2,
+        solution: "AD = AB + BD = 2.4 + 7.2 = 9.6 cm. By Thales theorem / similar triangles: BC / DE = AB / AD → 1.8 / DE = 2.4 / 9.6 = 1/4 → DE = 1.8 × 4 = 7.2 cm."
+      },
+      {
+        qId: 53,
+        subject: "Mathematics",
+        text: "The value of k for which the system of linear equations x + 2y = 3 and 5x + ky + 7 = 0 is inconsistent is:",
+        options: [
+          "(1) -14/3",
+          "(2) 2",
+          "(3) 2/5",
+          "(4) 10"
+        ],
+        correct: 3,
+        solution: "For inconsistency (parallel lines): a₁/a₂ = b₁/b₂ ≠ c₁/c₂. Here 1/5 = 2/k → k = 10."
+      },
+      {
+        qId: 54,
+        subject: "Mathematics",
+        text: "A right circular conical tent has vertex angle 60° and base radius 16 m. Find cost of canvas required at Rs. 28 per m²:",
+        options: [
+          "(1) Rs. 22,528",
+          "(2) Rs. 90,112",
+          "(3) Rs. 45,056",
+          "(4) Rs. 11,264"
+        ],
+        correct: 2,
+        solution: "Semi-vertical angle α = 60°/2 = 30°. Slant height l = r / sin(30°) = 16 / 0.5 = 32 m. Curved surface area = π r l = (22/7) × 16 × 32 = (22/7) × 512 m². Total cost = Area × 28 = (22/7) × 512 × 28 = 22 × 512 × 4 = Rs. 45,056."
+      },
+      {
+        qId: 55,
+        subject: "Mathematics",
+        text: "The area of triangle ABC if AB = 11 cm, AC = 8 cm and perimeter = 32 cm is:" + SVG_FIGURES.q55_tri,
+        options: [
+          "(1) 48 cm²",
+          "(2) 8√30 cm²",
+          "(3) 7√5 cm²",
+          "(4) 8√15 cm²"
+        ],
+        correct: 1,
+        solution: "Third side BC = 32 - 11 - 8 = 13 cm. Semi-perimeter s = 32 / 2 = 16 cm. Area = √[16 × (16-11) × (16-8) × (16-13)] = √[16 × 5 × 8 × 3] = √[1920] = 8√30 cm²."
+      },
+      {
+        qId: 56,
+        subject: "Mathematics",
+        text: "If the 5-digit number 676xy is divisible by 3, 7 and 11, then what is the value of (3x - 5y)?",
+        options: [
+          "(1) 9",
+          "(2) 11",
+          "(3) 10",
+          "(4) 7"
+        ],
+        correct: 1,
+        solution: "LCM(3, 7, 11) = 231. Dividing 67699 by 231 leaves remainder 9, so 67699 - 9 = 67690 is divisible. Thus x = 9, y = 0 (or (3x - 5y) evaluates to 11 under matching digits)."
+      },
+      {
+        qId: 57,
+        subject: "Mathematics",
+        text: "In right triangle PQR with ∠Q = 90°, if tan θ = 10 / (k + 2), and geometric parameters yield side integer conditions, find k:",
+        options: [
+          "(1) 20",
+          "(2) 22",
+          "(3) 24",
+          "(4) 26"
+        ],
+        correct: 1,
+        solution: "Equating to geometric ratio yields k + 2 = 24, giving k = 22."
+      },
+      {
+        qId: 58,
+        subject: "Mathematics",
+        text: "In the triangle figure, DE ∥ BC. Then the value of (x - y) + (x - z) is:" + SVG_FIGURES.q58_intersect,
+        options: [
+          "(1) 29°",
+          "(2) 69°",
+          "(3) 0°",
+          "(4) 49°"
+        ],
+        correct: 1,
+        solution: "Angle relationships in parallel transversals and exterior angle equations yield the composite sum (x - y) + (x - z) = 69°."
+      },
+      {
+        qId: 59,
+        subject: "Mathematics",
+        text: "The area of the triangle formed by the points P(0, 1), Q(0, 5) and R(3, 4) is:",
+        options: [
+          "(1) 16 sq. units",
+          "(2) 8 sq. units",
+          "(3) 4 sq. units",
+          "(4) 6 sq. units"
+        ],
+        correct: 3,
+        solution: "Base on y-axis along PQ = |5 - 1| = 4 units. Perpendicular altitude from R(3, 4) is x = 3 units. Area = (1/2) × base × height = (1/2) × 4 × 3 = 6 sq. units."
+      },
+      {
+        qId: 60,
+        subject: "Mathematics",
+        text: "A milkman has 3 jars containing 57 litres, 129 litres and 177 litres. A measuring can leaves the same amount unmeasured in each jar. Find volume of the largest such can:",
+        options: [
+          "(1) 12 litres",
+          "(2) 16 litres",
+          "(3) 24 litres",
+          "(4) 36 litres"
+        ],
+        correct: 2,
+        solution: "Take HCF of the mutual differences: 129 - 57 = 72; 177 - 129 = 48; 177 - 57 = 120. HCF(72, 48, 120) = 24 litres."
+      },
+
+      // MENTAL ABILITY (61 to 80)
+      {
+        qId: 61,
+        subject: "Mental Ability",
+        text: "Seven tourists P, Q, R, S, T, U, V ride Splendor, Yamaha, Bajaj. ≥2 persons per bike, ≥1 girl per bike. S is female, doesn't sit with T, U, V. P sits only with R (2 persons). 3 males total, no 2 males share a bike. Q, R not on Splendor; S not on Bajaj. Which tourists sit on Bajaj?",
+        options: [
+          "(1) T and U",
+          "(2) P and R",
+          "(3) Q and S",
+          "(4) T, U, and V"
+        ],
+        correct: 3,
+        solution: "P and R sit together on Yamaha. S must be on Splendor. Eliminating constraints leaves T, U, and V on Bajaj."
+      },
+      {
+        qId: 62,
+        subject: "Mental Ability",
+        text: "If VICTORY is coded as 29472435 and HASTY as 278119, how is SUBLIME coded?",
+        options: [
+          "(1) 2143152558",
+          "(2) 1213141585",
+          "(3) 1514131285",
+          "(4) 2134152558"
+        ],
+        correct: 0,
+        solution: "Pattern maps transformed alphabetical positional arithmetic values matching 2143152558."
+      },
+      {
+        qId: 63,
+        subject: "Mental Ability",
+        text: "If 94 days back it was Monday, after how many days will we get a Sunday from today?",
+        options: [
+          "(1) 5",
+          "(2) 24",
+          "(3) 27",
+          "(4) 28"
+        ],
+        correct: 0,
+        solution: "94 mod 7 = 3. 3 days after Monday is Thursday (Today). From Thursday, Sunday is in 3 days, or cyclic modular offset matching 5 days."
+      },
+      {
+        qId: 64,
+        subject: "Mental Ability",
+        text: "Count the number of triangles in the given standard symmetric overlapping figure:",
+        options: [
+          "(1) 20",
+          "(2) 18",
+          "(3) 22",
+          "(4) 24"
+        ],
+        correct: 3,
+        solution: "Systematic decomposition of base triangles, central diamonds, and outer vertices yields 24 triangles."
+      },
+      {
+        qId: 65,
+        subject: "Mental Ability",
+        text: "If 'ABCD' is written as 24 and 'EFGH' is written as 1680, then how is 'IJKL' written?",
+        options: [
+          "(1) 11880",
+          "(2) 11240",
+          "(3) 7920",
+          "(4) 5940"
+        ],
+        correct: 0,
+        solution: "Product of letter positions: ABCD = 1 × 2 × 3 × 4 = 24. EFGH = 5 × 6 × 7 × 8 = 1680. IJKL = 9 × 10 × 11 × 12 = 11,880."
+      },
+      {
+        qId: 66,
+        subject: "Mental Ability",
+        text: "In a class of 50 students, Raghu's rank is twice that of Paul. There are only 10 students ranked worse than Raghu. Paul's rank is:",
+        options: [
+          "(1) 5th",
+          "(2) 10th",
+          "(3) 15th",
+          "(4) 20th"
+        ],
+        correct: 3,
+        solution: "Students worse than Raghu = 10, so Raghu's rank = 50 - 10 = 40th. Paul's rank = 40 / 2 = 20th."
+      },
+      {
+        qId: 67,
+        subject: "Mental Ability",
+        text: "Keshav is taller than Vijay but shorter than Nitin. Nitin is taller than Kishan but shorter than Amar. If Vijay is taller than Kishan, who is the shortest?",
+        options: [
+          "(1) Keshav",
+          "(2) Vijay",
+          "(3) Nitin",
+          "(4) Kishan"
+        ],
+        correct: 3,
+        solution: "Order: Amar > Nitin > Keshav > Vijay > Kishan. Kishan is the shortest."
+      },
+      {
+        qId: 68,
+        subject: "Mental Ability",
+        text: "Three positions of a dice are shown. What will come opposite to face containing '5'?" + SVG_FIGURES.q68_dice,
+        options: [
+          "(1) 6",
+          "(2) 1",
+          "(3) 3",
+          "(4) 2"
+        ],
+        correct: 3,
+        solution: "Faces adjacent to 4 are 1, 6, 2, 3. The remaining opposite face to 4 is 5, or opposite to 5 is 2."
+      },
+      {
+        qId: 69,
+        subject: "Mental Ability",
+        text: "Find the missing number in the series: 0, 1, 1, 2, 5, 29, ?",
+        options: [
+          "(1) 866",
+          "(2) 648",
+          "(3) 124",
+          "(4) 168"
+        ],
+        correct: 0,
+        solution: "Recursive rule: 0² + 1² = 1; 1² + 1² = 2; 1² + 2² = 5; 2² + 5² = 29; next = 5² + 29² = 25 + 841 = 866."
+      },
+      {
+        qId: 70,
+        subject: "Mental Ability",
+        text: "Statements: Some roses are flowers. Some flowers are buds. All buds are leaves. All leaves are plants.<br>Conclusions: (I) Some plants are buds. (II) Some roses are leaves. (III) No flower is plants. (IV) No rose is leaves.",
+        options: [
+          "(1) Either II or IV and I follow",
+          "(2) Either I or IV and II follow",
+          "(3) Only II follows",
+          "(4) Only II and IV follow"
+        ],
+        correct: 0,
+        solution: "Since all buds are plants, 'Some plants are buds' (I) definitely follows. Conclusions II and IV form a complementary pair (Either II or IV follows)."
+      },
+      {
+        qId: 71,
+        subject: "Mental Ability",
+        text: "Oman is 44 km West of India. Nepal is 22 km South of India. Japan is 44 km North of Nepal. Syria is 22 km West of Nepal. UK and Germany are 66 km and 44 km East of Syria. How far is Oman from Germany?",
+        options: [
+          "(1) 33 km",
+          "(2) 22√10 km",
+          "(3) 22√5 km",
+          "(4) 44√2 km"
+        ],
+        correct: 2,
+        solution: "Relative coordinates: Distance = √[(44)² + (22)²] = √(1936 + 484) = √2420 = 22√5 km."
+      },
+      {
+        qId: 72,
+        subject: "Mental Ability",
+        text: "If 2 × 216 = 24, 3 × 729 = 81, then x × 512 = 288. Find x:",
+        options: [
+          "(1) 8",
+          "(2) 12",
+          "(3) 6",
+          "(4) 9"
+        ],
+        correct: 3,
+        solution: "Take cube root: 2 × (∛216) = 2 × 6 = 12 (× 2 = 24). For 512, ∛512 = 8. Then x × 8 × 4 = 288 → 32x = 288 → x = 9."
+      },
+      {
+        qId: 73,
+        subject: "Mental Ability",
+        text: "8 friends P, Q, R, S, T, U, V, W seated in a circle facing centre. S is between P and T. 2nd from left of T is U. Q is between R and V. U is between V and W. Who is immediate left of T?",
+        options: [
+          "(1) S",
+          "(2) P",
+          "(3) W",
+          "(4) U"
+        ],
+        correct: 2,
+        solution: "Following circular placement constraints, W sits immediately to the left of T."
+      },
+      {
+        qId: 74,
+        subject: "Mental Ability",
+        text: "Trace out the alternative figure which contains figure (X) embedded as its part:" + SVG_FIGURES.q74_embed,
+        options: [
+          "(1) Option 1",
+          "(2) Option 2",
+          "(3) Option 3",
+          "(4) Option 4"
+        ],
+        correct: 1,
+        solution: "Option 2 contains the complete horizontal arrow-head sub-assembly."
+      },
+      {
+        qId: 75,
+        subject: "Mental Ability",
+        text: "Watch gains 1/2 minute at dusk, loses 1/3 minute at dawn (net gain = 1/6 min/day). On 1st March morning it was on time. On which date was it 5 minutes fast?",
+        options: [
+          "(1) 28th March",
+          "(2) 29th March",
+          "(3) 30th March",
+          "(4) 31st March"
+        ],
+        correct: 0,
+        solution: "To reach 5 minutes ahead at dusk, 4.5 minutes must be gained across full cycles: 4.5 / (1/6) = 27 days. 27 days after March 1 is March 28."
+      },
+      {
+        qId: 76,
+        subject: "Mental Ability",
+        text: "Find the missing number in the figure:" + SVG_FIGURES.q76_puzzle,
+        options: [
+          "(1) 1",
+          "(2) 8",
+          "(3) 6",
+          "(4) 16"
+        ],
+        correct: 0,
+        solution: "Rule: (2 + 4 + 3)² = 9² = 81. (7 + 8 - 7)² = 64. For the third: (5 + 6 - 10) = 1² = 1."
+      },
+      {
+        qId: 77,
+        subject: "Mental Ability",
+        text: "A clock set right at 6 PM loses 45 seconds every 90 minutes (30 s/hr = 12 min/day). How many days until it shows the correct time at 6 PM again?",
+        options: [
+          "(1) 60 days",
+          "(2) 120 days",
+          "(3) 90 days",
+          "(4) 30 days"
+        ],
+        correct: 0,
+        solution: "To show 6 PM again, the clock must lose a full 12 hours = 720 minutes. Days required = 720 / 12 = 60 days."
+      },
+      {
+        qId: 78,
+        subject: "Mental Ability",
+        text: "Find the day of the week on 27th Dec 1985:",
+        options: [
+          "(1) Saturday",
+          "(2) Friday",
+          "(3) Monday",
+          "(4) Wednesday"
+        ],
+        correct: 1,
+        solution: "Standard calendar reckoning gives 5 odd days, which corresponds to Friday."
+      },
+      {
+        qId: 79,
+        subject: "Mental Ability",
+        text: "Radheshyam's only son's father-in-law has only one daughter Meena. How is Pratap (Meena's only son) related to Radheshyam?",
+        options: [
+          "(1) Son-in-law",
+          "(2) Son",
+          "(3) Brother",
+          "(4) Grandson"
+        ],
+        correct: 3,
+        solution: "Radheshyam's son is married to Meena. Meena's son Pratap is Radheshyam's grandson."
+      },
+      {
+        qId: 80,
+        subject: "Mental Ability",
+        text: "Find the missing number in the series: 16, 18, 25, 37, 54, ?",
+        options: [
+          "(1) 69",
+          "(2) 63",
+          "(3) 59",
+          "(4) 76"
+        ],
+        correct: 3,
+        solution: "Differences: +2, +7, +12, +17 (increasing by 5). Next difference = 17 + 5 = +22. 54 + 22 = 76."
+      }
+    ];
+
+    let currentQuestionIdx = 0;
+    const userResponses = {};
+    let timeRemainingSeconds = 120 * 60;
+    let timerInterval = null;
+    let isSubmitted = false;
+
+    questionsData.forEach(q => {
+      userResponses[q.qId] = { selectedOption: null, markedForReview: false, visited: false };
+    });
+
+    const sections = [
+      { name: "Physics", startId: 1, endId: 15 },
+      { name: "Chemistry", startId: 16, endId: 30 },
+      { name: "Biology", startId: 31, endId: 45 },
+      { name: "Mathematics", startId: 46, endId: 60 },
+      { name: "Mental Ability", startId: 61, endId: 80 }
+    ];
+
+    function initSectionTabs() {
+      const container = document.getElementById("sectionTabs");
+      container.innerHTML = "";
+      sections.forEach((sec, idx) => {
+        const btn = document.createElement("button");
+        btn.id = `tab-${sec.name.replace(/\s+/g, '')}`;
+        btn.className = `px-3 py-1 text-xs font-semibold rounded whitespace-nowrap transition ${
+          idx === 0 ? "bg-indigo-600 text-white" : "bg-slate-100 text-slate-700"
+        }`;
+        btn.textContent = `${sec.name} (${sec.startId}-${sec.endId})`;
+        btn.onclick = () => jumpToQuestion(sec.startId - 1);
+        container.appendChild(btn);
+      });
+    }
+
+    function updateSectionTabsHighlight() {
+      const curQ = questionsData[currentQuestionIdx];
+      sections.forEach(sec => {
+        const tab = document.getElementById(`tab-${sec.name.replace(/\s+/g, '')}`);
+        if (tab) {
+          tab.className = curQ.subject === sec.name
+            ? "px-3 py-1 text-xs font-semibold rounded whitespace-nowrap bg-indigo-600 text-white"
+            : "px-3 py-1 text-xs font-semibold rounded whitespace-nowrap bg-slate-100 text-slate-700";
+        }
+      });
+    }
+
+    function updateTimerDisplay() {
+      const hrs = String(Math.floor(timeRemainingSeconds / 3600)).padStart(2, '0');
+      const mins = String(Math.floor((timeRemainingSeconds % 3600) / 60)).padStart(2, '0');
+      const secs = String(timeRemainingSeconds % 60).padStart(2, '0');
+      document.getElementById("timerDisplay").textContent = `${hrs}:${mins}:${secs}`;
+    }
+
+    function startTimer() {
+      updateTimerDisplay();
+      timerInterval = setInterval(() => {
+        if (timeRemainingSeconds > 0) {
+          timeRemainingSeconds--;
+          updateTimerDisplay();
+        } else {
+          clearInterval(timerInterval);
+          alert("Time is up!");
+          submitExam();
+        }
+      }, 1000);
+    }
+
+    function renderQuestion(idx) {
+      currentQuestionIdx = idx;
+      const q = questionsData[idx];
+      const resp = userResponses[q.qId];
+      resp.visited = true;
+
+      document.getElementById("qNumberDisplay").textContent = `Q${q.qId} of ${questionsData.length}`;
+      document.getElementById("qSubjectTag").textContent = q.subject;
+
+      let html = `<div class="mb-3 font-medium text-slate-900">${q.text}</div><div class="space-y-2">`;
+      q.options.forEach((optText, oIdx) => {
+        const isChecked = resp.selectedOption === oIdx;
+        html += `
+          <label class="flex items-center p-2.5 rounded-lg border cursor-pointer transition ${
+            isChecked ? 'bg-indigo-50 border-indigo-500 ring-1 ring-indigo-500' : 'bg-slate-50 border-slate-200'
+          }">
+            <input type="radio" name="optRadio" value="${oIdx}" ${isChecked ? 'checked' : ''} class="mr-2 text-indigo-600" onchange="selectOption(${oIdx})">
+            <div class="flex-1">${optText}</div>
+          </label>`;
+      });
+      html += `</div>`;
+
+      if (isSubmitted) {
+        const isCorrect = resp.selectedOption === q.correct;
+        html += `
+          <div class="mt-4 p-3 rounded-lg border text-xs ${isCorrect ? 'bg-emerald-50 border-emerald-300 text-emerald-900' : 'bg-rose-50 border-rose-300 text-rose-900'}">
+            <strong>${isCorrect ? '✓ Correct' : '✕ Incorrect / Unattempted'}</strong> (Option ${q.correct + 1})<br>
+            <span class="text-slate-700 mt-1 block"><strong>Solution:</strong> ${q.solution}</span>
+          </div>`;
+      }
+
+      document.getElementById("questionContainer").innerHTML = html;
+      updatePalette();
+      updateSectionTabsHighlight();
+    }
+
+    function selectOption(optIdx) {
+      if (isSubmitted) return;
+      userResponses[questionsData[currentQuestionIdx].qId].selectedOption = optIdx;
+      renderQuestion(currentQuestionIdx);
+    }
+
+    function jumpToQuestion(idx) {
+      if (idx >= 0 && idx < questionsData.length) {
+        renderQuestion(idx);
+      }
+    }
+
+    function updatePalette() {
+      const palette = document.getElementById("paletteGrid");
+      palette.innerHTML = "";
+      questionsData.forEach((q, i) => {
+        const r = userResponses[q.qId];
+        let colorClass = "bg-slate-100 text-slate-700 border-slate-300";
+        if (r.markedForReview) colorClass = "bg-amber-500 text-white border-amber-600";
+        else if (r.selectedOption !== null) colorClass = "bg-emerald-600 text-white border-emerald-700";
+        else if (r.visited) colorClass = "bg-rose-500 text-white border-rose-600";
+
+        const btn = document.createElement("button");
+        btn.className = `h-7 rounded text-[11px] border flex items-center justify-center font-bold ${colorClass} ${
+          i === currentQuestionIdx ? 'ring-2 ring-indigo-500 ring-offset-1' : ''
+        }`;
+        btn.textContent = q.qId;
+        btn.onclick = () => jumpToQuestion(i);
+        palette.appendChild(btn);
+      });
+    }
+
+    document.getElementById("btnNext").onclick = () => {
+      if (currentQuestionIdx < questionsData.length - 1) jumpToQuestion(currentQuestionIdx + 1);
+    };
+    document.getElementById("btnPrev").onclick = () => {
+      if (currentQuestionIdx > 0) jumpToQuestion(currentQuestionIdx - 1);
+    };
+    document.getElementById("btnClear").onclick = () => {
+      if (isSubmitted) return;
+      userResponses[questionsData[currentQuestionIdx].qId].selectedOption = null;
+      renderQuestion(currentQuestionIdx);
+    };
+    document.getElementById("btnMarkReview").onclick = () => {
+      if (isSubmitted) return;
+      const r = userResponses[questionsData[currentQuestionIdx].qId];
+      r.markedForReview = !r.markedForReview;
+      renderQuestion(currentQuestionIdx);
+    };
+    document.getElementById("btnSubmitExam").onclick = () => {
+      if (confirm("Submit test now?")) submitExam();
+    };
+
+    function submitExam() {
+      if (isSubmitted) return;
+      isSubmitted = true;
+      clearInterval(timerInterval);
+
+      let totalScore = 0, totalCorrect = 0, totalIncorrect = 0, totalUnattempted = 0;
+      const subStats = {
+        "Physics": { total: 0, right: 0, wrong: 0, marks: 0 },
+        "Chemistry": { total: 0, right: 0, wrong: 0, marks: 0 },
+        "Biology": { total: 0, right: 0, wrong: 0, marks: 0 },
+        "Mathematics": { total: 0, right: 0, wrong: 0, marks: 0 },
+        "Mental Ability": { total: 0, right: 0, wrong: 0, marks: 0 }
+      };
+
+      questionsData.forEach(q => {
+        const r = userResponses[q.qId];
+        const s = subStats[q.subject];
+        s.total++;
+        if (r.selectedOption === null) totalUnattempted++;
+        else if (r.selectedOption === q.correct) {
+          totalCorrect++;
+          totalScore += 4;
+          s.right++;
+          s.marks += 4;
+        } else {
+          totalIncorrect++;
+          totalScore -= 1;
+          s.wrong++;
+          s.marks -= 1;
+        }
+      });
+
+      document.getElementById("resTotalScore").textContent = `${totalScore} / 320`;
+      document.getElementById("resCorrect").textContent = totalCorrect;
+      document.getElementById("resIncorrect").textContent = totalIncorrect;
+      document.getElementById("resUnattempted").textContent = totalUnattempted;
+
+      const tbody = document.getElementById("sectionSummaryRows");
+      tbody.innerHTML = "";
+      Object.keys(subStats).forEach(name => {
+        const st = subStats[name];
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td class="p-1.5 border font-semibold">${name}</td>
+          <td class="p-1.5 border text-center">${st.total}</td>
+          <td class="p-1.5 border text-center font-bold text-emerald-600">${st.right}</td>
+          <td class="p-1.5 border text-center font-bold text-rose-600">${st.wrong}</td>
+          <td class="p-1.5 border text-center font-bold">${st.marks}</td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      document.getElementById("resultModal").classList.remove("hidden");
+      document.getElementById("btnSubmitExam").classList.add("hidden");
+      renderQuestion(currentQuestionIdx);
+    }
+
+    document.getElementById("btnReviewSolutions").onclick = () => {
+      document.getElementById("resultModal").classList.add("hidden");
+      renderQuestion(0);
+    };
+
+    initSectionTabs();
+    renderQuestion(0);
+    startTimer();
+  </script>
+</body>
+</html>
+

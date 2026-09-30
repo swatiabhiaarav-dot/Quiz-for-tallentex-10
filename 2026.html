@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>TALLENTEX 2026 Class 10 (Paper Code U)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .custom-scroll::-webkit-scrollbar { width: 5px; height: 5px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 4px; }
+    svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased font-sans select-none min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-indigo-900 text-white shadow sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-3 py-2 flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <span class="bg-amber-400 text-slate-950 text-[10px] font-black uppercase px-1.5 py-0.5 rounded">TALLENTEX 2026</span>
+        <h1 class="text-xs sm:text-base font-bold truncate max-w-[150px] sm:max-w-none">Class 10 (Code U)</h1>
+      </div>
+      <div class="flex items-center space-x-3">
+        <div class="text-right">
+          <span class="text-[10px] text-indigo-200 block leading-tight">Time Left</span>
+          <span id="timerDisplay" class="font-mono font-bold text-base sm:text-lg text-amber-300">02:00:00</span>
+        </div>
+        <button id="btnSubmitExam" class="bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-3 py-1.5 rounded shadow">
+          Submit
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Section Bar -->
+  <div class="bg-white border-b border-slate-200 shadow-sm sticky top-[49px] z-40">
+    <div class="max-w-7xl mx-auto px-3 flex space-x-2 overflow-x-auto py-2 custom-scroll" id="sectionTabs"></div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-3 py-3 flex-1 flex flex-col lg:flex-row gap-3 w-full">
+    
+    <!-- Question Area -->
+    <div class="flex-1 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col p-4 min-h-[500px]">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-200 mb-3">
+        <div class="flex items-center space-x-2">
+          <span class="font-bold text-slate-800 text-sm sm:text-base" id="qNumberDisplay">Question 1</span>
+          <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded border border-slate-300" id="qSubjectTag">Physics</span>
+        </div>
+        <div class="flex items-center space-x-2 text-[11px] font-semibold">
+          <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">+4</span>
+          <span class="text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">-1</span>
+        </div>
+      </div>
+
+      <!-- Question Text + Figures -->
+      <div id="questionContainer" class="flex-1 text-slate-800 text-xs sm:text-sm leading-relaxed overflow-y-auto custom-scroll pr-1"></div>
+
+      <!-- Footer Buttons -->
+      <div class="pt-3 border-t border-slate-200 mt-3 flex items-center justify-between flex-wrap gap-2">
+        <div class="flex items-center space-x-1.5">
+          <button id="btnPrev" class="px-2.5 py-1.5 rounded border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold">Prev</button>
+          <button id="btnNext" class="px-3 py-1.5 rounded bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold">Save & Next</button>
+        </div>
+        <div class="flex items-center space-x-1.5">
+          <button id="btnClear" class="px-2 py-1.5 rounded border border-slate-300 text-slate-600 hover:text-slate-900 text-xs">Clear</button>
+          <button id="btnMarkReview" class="px-2.5 py-1.5 rounded bg-amber-500 hover:bg-amber-600 text-white text-xs font-medium">Review</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Palette -->
+    <aside class="w-full lg:w-72 bg-white rounded-xl shadow-sm border border-slate-200 p-3 flex flex-col shrink-0">
+      <h2 class="font-bold text-slate-800 text-xs mb-2">Question Palette (80 Questions)</h2>
+      <div class="grid grid-cols-2 gap-1.5 text-[10px] text-slate-600 mb-2 pb-2 border-b border-slate-200">
+        <div class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded bg-emerald-500"></span><span>Answered</span></div>
+        <div class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded bg-amber-500"></span><span>Review</span></div>
+        <div class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded bg-rose-500"></span><span>Unanswered</span></div>
+        <div class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded bg-slate-200 border"></span><span>Not Visited</span></div>
+      </div>
+      <div id="paletteGrid" class="grid grid-cols-8 lg:grid-cols-5 gap-1.5 overflow-y-auto max-h-[280px] lg:max-h-[460px] custom-scroll p-1"></div>
+    </aside>
+  </main>
+
+  <!-- Result Modal -->
+  <div id="resultModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 overflow-y-auto">
+    <div class="bg-white rounded-xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl max-h-[92vh] overflow-y-auto custom-scroll">
+      <div class="text-center pb-3 border-b border-slate-200">
+        <span class="bg-indigo-100 text-indigo-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Report Card</span>
+        <h2 class="text-xl font-black text-slate-900 mt-1">TALLENTEX 2026 Test Results</h2>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 my-4">
+        <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-2 text-center">
+          <span class="text-[10px] font-semibold text-indigo-600 block">Total Score</span>
+          <span id="resTotalScore" class="text-lg font-black text-indigo-900">0 / 320</span>
+        </div>
+        <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-2 text-center">
+          <span class="text-[10px] font-semibold text-emerald-600 block">Correct (+4)</span>
+          <span id="resCorrect" class="text-lg font-black text-emerald-900">0</span>
+        </div>
+        <div class="bg-rose-50 border border-rose-200 rounded-lg p-2 text-center">
+          <span class="text-[10px] font-semibold text-rose-600 block">Wrong (-1)</span>
+          <span id="resIncorrect" class="text-lg font-black text-rose-900">0</span>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 rounded-lg p-2 text-center">
+          <span class="text-[10px] font-semibold text-slate-600 block">Unattempted</span>
+          <span id="resUnattempted" class="text-lg font-black text-slate-800">0</span>
+        </div>
+      </div>
+      <h3 class="text-xs font-bold text-slate-800 uppercase mb-2">Subject Breakdown</h3>
+      <div class="overflow-x-auto mb-4">
+        <table class="w-full text-left text-xs border border-slate-200">
+          <thead>
+            <tr class="bg-slate-100 text-slate-700">
+              <th class="p-1.5 border">Subject</th>
+              <th class="p-1.5 border text-center">Ques</th>
+              <th class="p-1.5 border text-center text-emerald-700">Right</th>
+              <th class="p-1.5 border text-center text-rose-700">Wrong</th>
+              <th class="p-1.5 border text-center">Marks</th>
+            </tr>
+          </thead>
+          <tbody id="sectionSummaryRows"></tbody>
+        </table>
+      </div>
+      <div class="flex justify-end pt-2 border-t border-slate-200">
+        <button id="btnReviewSolutions" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs px-4 py-2 rounded-lg">
+          Review Questions & Detailed Solutions
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SVG_FIGURES = {
+      q1_force: `
+        <div class="my-3 flex justify-center">
+          <svg width="220" height="150" viewBox="0 0 220 150" class="bg-white border rounded p-1">
+            <line x1="30" y1="120" x2="200" y2="120" stroke="#1e293b" stroke-width="2"/>
+            <line x1="30" y1="120" x2="30" y2="20" stroke="#1e293b" stroke-width="2"/>
+            <text x="12" y="25" font-size="11" font-weight="bold">F (N)</text>
+            <text x="195" y="135" font-size="11" font-weight="bold">t(s)</text>
+            <text x="20" y="125" font-size="10">O</text>
+            <line x1="30" y1="45" x2="110" y2="45" stroke="#94a3b8" stroke-dasharray="2,2"/>
+            <line x1="110" y1="45" x2="110" y2="120" stroke="#94a3b8" stroke-dasharray="2,2"/>
+            <text x="10" y="48" font-size="10" font-weight="bold">20</text>
+            <text x="107" y="133" font-size="10" font-weight="bold">2</text>
+            <text x="177" y="133" font-size="10" font-weight="bold">4</text>
+            <polyline points="30,120 110,45 180,120" fill="none" stroke="#dc2626" stroke-width="2.5"/>
+          </svg>
+        </div>`,
+      q1_opt1: `<svg width="100" height="75" viewBox="0 0 100 75" class="inline-block border bg-white p-0.5 rounded mr-2"><line x1="18" y1="60" x2="90" y2="60" stroke="#000"/><line x1="18" y1="60" x2="18" y2="10" stroke="#000"/><text x="2" y="18" font-size="8">80</text><text x="2" y="38" font-size="8">40</text><text x="50" y="70" font-size="8">2</text><text x="80" y="70" font-size="8">4</text><path d="M18,60 Q 55,40 85,15" fill="none" stroke="#2563eb" stroke-width="1.5"/></svg>`,
+      q1_opt2: `<svg width="100" height="75" viewBox="0 0 100 75" class="inline-block border bg-white p-0.5 rounded mr-2"><line x1="18" y1="60" x2="90" y2="60" stroke="#000"/><line x1="18" y1="60" x2="18" y2="10" stroke="#000"/><text x="2" y="18" font-size="8">80</text><text x="2" y="38" font-size="8">40</text><text x="50" y="70" font-size="8">2</text><text x="80" y="70" font-size="8">4</text><path d="M18,60 Q 30,30 50,38 Q 70,50 85,15" fill="none" stroke="#2563eb" stroke-width="1.5"/></svg>`,
+      q1_opt3: `<svg width="100" height="75" viewBox="0 0 100 75" class="inline-block border bg-white p-0.5 rounded mr-2"><line x1="18" y1="60" x2="90" y2="60" stroke="#000"/><line x1="18" y1="60" x2="18" y2="10" stroke="#000"/><text x="2" y="25" font-size="8">40</text><text x="2" y="45" font-size="8">20</text><text x="50" y="70" font-size="8">2</text><text x="80" y="70" font-size="8">4</text><path d="M18,60 Q 38,55 50,42 Q 68,26 85,25" fill="none" stroke="#16a34a" stroke-width="2"/></svg>`,
+      q1_opt4: `<svg width="100" height="75" viewBox="0 0 100 75" class="inline-block border bg-white p-0.5 rounded mr-2"><line x1="18" y1="60" x2="90" y2="60" stroke="#000"/><line x1="18" y1="60" x2="18" y2="10" stroke="#000"/><text x="2" y="25" font-size="8">40</text><text x="2" y="45" font-size="8">20</text><text x="50" y="70" font-size="8">2</text><text x="80" y="70" font-size="8">4</text><path d="M18,60 Q 32,38 50,44 Q 68,52 85,25" fill="none" stroke="#2563eb" stroke-width="1.5"/></svg>`,
+      q4_ramp: `
+        <div class="my-3 flex justify-center">
+          <svg width="270" height="100" viewBox="0 0 270 100" class="bg-white border rounded p-1">
+            <line x1="20" y1="80" x2="180" y2="80" stroke="#334155" stroke-width="2"/>
+            <path d="M 180,80 Q 220,80 225,15" fill="none" stroke="#334155" stroke-width="2"/>
+            <line x1="225" y1="80" x2="225" y2="15" stroke="#94a3b8" stroke-dasharray="3,3"/>
+            <text x="232" y="50" font-size="11" font-weight="bold">H_max</text>
+            <rect x="40" y="62" width="45" height="15" rx="3" fill="#3b82f6"/>
+            <circle cx="50" cy="79" r="4" fill="#0f172a"/><circle cx="75" cy="79" r="4" fill="#0f172a"/>
+            <text x="42" y="94" font-size="10" font-weight="bold">x = 0</text>
+            <text x="165" y="94" font-size="10" font-weight="bold">x = 11m</text>
+          </svg>
+        </div>`,
+      q9_vu: `
+        <div class="my-3 flex justify-center">
+          <svg width="170" height="150" viewBox="0 0 170 150" class="bg-white border rounded p-1">
+            <line x1="25" y1="125" x2="155" y2="125" stroke="#1e293b" stroke-width="2"/>
+            <line x1="25" y1="125" x2="25" y2="15" stroke="#1e293b" stroke-width="2"/>
+            <text x="14" y="22" font-size="11" font-weight="bold">v</text>
+            <text x="150" y="137" font-size="11" font-weight="bold">u</text>
+            <line x1="25" y1="125" x2="80" y2="70" stroke="#64748b" stroke-dasharray="2,2"/>
+            <path d="M 45,20 Q 60,65 80,70 Q 110,80 150,95" fill="none" stroke="#2563eb" stroke-width="2"/>
+            <circle cx="80" cy="70" r="3.5" fill="#dc2626"/>
+            <text x="87" y="67" font-size="11" font-weight="bold" fill="#dc2626">A</text>
+            <text x="42" y="118" font-size="9">45°</text>
+          </svg>
+        </div>`,
+      q15_vt: `
+        <div class="my-3 flex justify-center">
+          <svg width="180" height="120" viewBox="0 0 180 120" class="bg-white border rounded p-1">
+            <line x1="25" y1="95" x2="155" y2="95" stroke="#1e293b" stroke-width="2"/>
+            <line x1="25" y1="95" x2="25" y2="15" stroke="#1e293b" stroke-width="2"/>
+            <text x="10" y="20" font-size="10" font-weight="bold">v(m/s)</text>
+            <text x="145" y="108" font-size="10" font-weight="bold">t(s)</text>
+            <text x="16" y="100" font-size="9">O</text>
+            <text x="10" y="35" font-size="10" font-weight="bold">10</text>
+            <text x="112" y="108" font-size="10" font-weight="bold">2</text>
+            <line x1="25" y1="32" x2="115" y2="95" stroke="#dc2626" stroke-width="2.5"/>
+          </svg>
+        </div>`,
+      q23_flow: `
+        <div class="my-3 flex justify-center">
+          <svg width="290" height="125" viewBox="0 0 290 125" class="bg-white border rounded p-1 text-[10px]">
+            <rect x="105" y="5" width="80" height="22" rx="4" fill="#e0e7ff" stroke="#4f46e5"/>
+            <text x="130" y="20" font-weight="bold">Brine</text>
+            <line x1="105" y1="16" x2="45" y2="42" stroke="#64748b" stroke-width="1.5"/>
+            <text x="5" y="31" fill="#64748b">+NH₃, CO₂</text>
+            <rect x="10" y="42" width="75" height="22" rx="4" fill="#f1f5f9" stroke="#94a3b8"/>
+            <text x="20" y="57">i and ii</text>
+            <line x1="185" y1="16" x2="245" y2="42" stroke="#64748b" stroke-width="1.5"/>
+            <text x="200" y="31" fill="#64748b">electrolysis</text>
+            <rect x="200" y="42" width="80" height="22" rx="4" fill="#fef3c7" stroke="#d97706"/>
+            <text x="215" y="57">iii, iv, v</text>
+            <line x1="240" y1="64" x2="240" y2="88" stroke="#64748b" stroke-width="1.5"/>
+            <rect x="200" y="88" width="80" height="22" rx="4" fill="#dcfce7" stroke="#16a34a"/>
+            <text x="233" y="103" font-weight="bold">vi</text>
+            <text x="110" y="98" font-size="9" fill="#475569">+ Dry slaked lime</text>
+          </svg>
+        </div>`,
+      q27_shells: `
+        <div class="my-3 flex justify-center space-x-4">
+          <div class="text-center">
+            <svg width="95" height="95" viewBox="0 0 95 95" class="border rounded bg-white">
+              <circle cx="47" cy="47" r="38" fill="none" stroke="#64748b" stroke-width="1.5"/>
+              <circle cx="47" cy="9" r="3" fill="#dc2626"/><circle cx="80" cy="35" r="3" fill="#dc2626"/>
+              <circle cx="68" cy="76" r="3" fill="#dc2626"/><circle cx="26" cy="76" r="3" fill="#dc2626"/>
+              <circle cx="14" cy="35" r="3" fill="#dc2626"/>
+              <text x="43" y="50" font-size="10" font-weight="bold">M</text>
+            </svg>
+            <span class="text-[11px] font-bold block mt-1">P (5 e⁻ in M)</span>
+          </div>
+          <div class="text-center">
+            <svg width="95" height="95" viewBox="0 0 95 95" class="border rounded bg-white">
+              <circle cx="47" cy="47" r="38" fill="none" stroke="#64748b" stroke-width="1.5"/>
+              <circle cx="47" cy="9" r="3" fill="#2563eb"/><circle cx="76" cy="25" r="3" fill="#2563eb"/>
+              <circle cx="83" cy="55" r="3" fill="#2563eb"/><circle cx="63" cy="80" r="3" fill="#2563eb"/>
+              <circle cx="31" cy="80" r="3" fill="#2563eb"/><circle cx="11" cy="55" r="3" fill="#2563eb"/>
+              <circle cx="18" cy="25" r="3" fill="#2563eb"/>
+              <text x="43" y="50" font-size="10" font-weight="bold">M</text>
+            </svg>
+            <span class="text-[11px] font-bold block mt-1">Q (7 e⁻ in M)</span>
+          </div>
+        </div>`,
+      q28_pie: `
+        <div class="my-3 flex justify-center">
+          <svg width="130" height="130" viewBox="0 0 130 130" class="bg-white border rounded p-1">
+            <circle cx="65" cy="65" r="50" fill="#f8fafc" stroke="#334155" stroke-width="1.5"/>
+            <path d="M 65,65 L 65,15 A 50,50 0 1,1 115,65 Z" fill="#93c5fd"/>
+            <path d="M 65,65 L 115,65 A 50,50 0 0,1 65,115 Z" fill="#cbd5e1" stroke="#475569"/>
+            <text x="38" y="52" font-size="11" font-weight="bold" fill="#1e3a8a">[X] (3 parts)</text>
+            <text x="70" y="98" font-size="10" font-weight="bold" fill="#334155">[Y] (1 part)</text>
+          </svg>
+        </div>`,
+      q29_beaker: `
+        <div class="my-3 flex justify-center">
+          <svg width="180" height="120" viewBox="0 0 180 120" class="bg-white border rounded p-1">
+            <rect x="65" y="18" width="65" height="85" rx="3" fill="none" stroke="#475569" stroke-width="2"/>
+            <rect x="66" y="50" width="63" height="52" fill="#bae6fd" opacity="0.6"/>
+            <circle cx="80" cy="94" r="3" fill="#cbd5e1"/><circle cx="95" cy="96" r="3.5" fill="#cbd5e1"/>
+            <text x="135" y="32" font-size="9" fill="#334155">← Beaker</text>
+            <text x="135" y="60" font-size="9" fill="#0369a1">← Water</text>
+            <text x="135" y="98" font-size="9" fill="#475569">← Quick lime</text>
+            <path d="M 25,55 Q 42,60 62,63 M 25,67 Q 45,68 62,70 M 25,78 Q 47,76 62,76" stroke="#d97706" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>`,
+      q31_nmj: `
+        <div class="my-3 flex justify-center">
+          <svg width="200" height="115" viewBox="0 0 200 115" class="bg-white border rounded p-1">
+            <ellipse cx="130" cy="88" rx="58" ry="18" fill="#fecdd3" stroke="#e11d48" stroke-width="1.5"/>
+            <text x="135" y="80" font-size="9" font-weight="bold" fill="#9f1239">③ Muscle</text>
+            <path d="M 35,18 Q 70,40 95,58" fill="none" stroke="#0284c7" stroke-width="5" stroke-linecap="round"/>
+            <text x="12" y="20" font-size="9" font-weight="bold" fill="#0369a1">① Axon</text>
+            <circle cx="90" cy="64" r="3.5" fill="#0ea5e9"/>
+            <circle cx="106" cy="66" r="3.5" fill="#0ea5e9"/>
+            <circle cx="118" cy="67" r="3.5" fill="#0ea5e9"/>
+            <text x="125" y="52" font-size="9" font-weight="bold" fill="#0369a1">② NMJ</text>
+          </svg>
+        </div>`,
+      q35_dialysis: `
+        <div class="my-3 flex justify-center">
+          <svg width="270" height="135" viewBox="0 0 270 135" class="bg-white border rounded p-1 text-[9px]">
+            <rect x="10" y="25" width="38" height="60" rx="8" fill="#fed7aa" stroke="#ea580c"/>
+            <text x="14" y="60" font-weight="bold" fill="#9a3412">Patient</text>
+            <path d="M 48,38 L 80,38 L 80,20 L 110,20" fill="none" stroke="#dc2626" stroke-width="2"/>
+            <text x="60" y="16" fill="#dc2626">From artery</text>
+            <path d="M 110,75 L 80,75 L 80,55 L 48,55" fill="none" stroke="#2563eb" stroke-width="2"/>
+            <text x="55" y="90" fill="#2563eb">To vein</text>
+            <rect x="110" y="12" width="75" height="75" rx="3" fill="#f8fafc" stroke="#475569" stroke-width="1.5"/>
+            <path d="M 115,22 H 180 V 32 H 115 V 42 H 180 V 52 H 115 V 62 H 180 V 72 H 115" fill="none" stroke="#e11d48" stroke-width="1.5"/>
+            <rect x="115" y="95" width="28" height="30" rx="2" fill="#bae6fd" stroke="#0284c7"/>
+            <text x="117" y="108" font-size="8">Fresh</text>
+            <rect x="155" y="95" width="28" height="30" rx="2" fill="#fef08a" stroke="#ca8a04"/>
+            <text x="158" y="108" font-size="8">Used</text>
+          </svg>
+        </div>`,
+      q39_leaf: `
+        <div class="my-3 flex justify-center">
+          <svg width="270" height="135" viewBox="0 0 270 135" class="bg-white border rounded p-1 text-[9px]">
+            <ellipse cx="50" cy="65" rx="40" ry="26" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+            <rect x="32" y="52" width="9" height="26" rx="2" fill="#15803d"/>
+            <rect x="50" y="52" width="9" height="26" rx="2" fill="#15803d"/>
+            <text x="62" y="55" font-weight="bold">⑤ Stroma</text>
+            <text x="30" y="90" font-weight="bold">⑥ Grana</text>
+            <line x1="130" y1="18" x2="250" y2="18" stroke="#ca8a04" stroke-width="3"/>
+            <text x="252" y="20">① Cuticle</text>
+            <rect x="130" y="22" width="120" height="15" fill="#fef9c3" stroke="#ca8a04"/>
+            <text x="252" y="34">② Epidermis</text>
+            <rect x="135" y="40" width="18" height="36" rx="2" fill="#bbf7d0" stroke="#16a34a"/>
+            <rect x="162" y="40" width="18" height="36" rx="2" fill="#bbf7d0" stroke="#16a34a"/>
+            <text x="218" y="60" font-weight="bold">③ Palisade</text>
+            <ellipse cx="170" cy="112" rx="6" ry="4" fill="#86efac" stroke="#15803d"/>
+            <ellipse cx="184" cy="112" rx="6" ry="4" fill="#86efac" stroke="#15803d"/>
+            <text x="198" y="117" font-weight="bold">④ Guard cell</text>
+          </svg>
+        </div>`,
+      q41_circulation: `
+        <div class="my-3 flex justify-center">
+          <svg width="200" height="190" viewBox="0 0 200 190" class="bg-white border rounded p-1 text-[10px]">
+            <ellipse cx="100" cy="18" rx="30" ry="11" fill="#fed7aa" stroke="#ea580c"/>
+            <text x="88" y="21" font-size="8">Lungs</text>
+            <ellipse cx="100" cy="172" rx="34" ry="11" fill="#fed7aa" stroke="#ea580c"/>
+            <text x="78" y="175" font-size="8">E (Tissues)</text>
+            <rect x="75" y="72" width="50" height="45" rx="5" fill="#fecdd3" stroke="#e11d48"/>
+            <path d="M 88,72 C 65,50 65,28 82,22" fill="none" stroke="#3b82f6" stroke-width="2"/>
+            <text x="48" y="48" font-weight="bold" fill="#1d4ed8">C</text>
+            <path d="M 118,22 C 135,28 135,50 112,72" fill="none" stroke="#ef4444" stroke-width="2"/>
+            <text x="140" y="48" font-weight="bold" fill="#b91c1c">D</text>
+            <path d="M 112,117 C 135,135 135,158 118,170" fill="none" stroke="#ef4444" stroke-width="2"/>
+            <text x="140" y="145" font-weight="bold" fill="#b91c1c">B</text>
+            <path d="M 82,170 C 65,158 65,135 88,117" fill="none" stroke="#3b82f6" stroke-width="2"/>
+            <text x="50" y="145" font-weight="bold" fill="#1d4ed8">A</text>
+          </svg>
+        </div>`,
+      q42_tropism: `
+        <div class="my-3 flex justify-center">
+          <svg width="200" height="135" viewBox="0 0 200 135" class="bg-white border rounded p-1 text-[10px]">
+            <circle cx="170" cy="28" r="12" fill="#fbbf24"/>
+            <text x="160" y="55" font-size="9" fill="#d97706">Light</text>
+            <polygon points="35,125 62,125 66,105 31,105" fill="#ca8a04"/>
+            <path d="M 48,105 Q 48,65 105,46" fill="none" stroke="#16a34a" stroke-width="4.5" stroke-linecap="round"/>
+            <text x="25" y="60" font-weight="bold">Side B</text>
+            <text x="110" y="70" font-weight="bold">Side A</text>
+          </svg>
+        </div>`,
+      q48_circle: `
+        <div class="my-3 flex justify-center">
+          <svg width="150" height="150" viewBox="0 0 150 150" class="bg-white border rounded p-1 text-[11px]">
+            <circle cx="75" cy="75" r="60" fill="none" stroke="#334155" stroke-width="2"/>
+            <circle cx="75" cy="75" r="3" fill="#0f172a"/>
+            <text x="72" y="68" font-weight="bold">O</text>
+            <polygon points="20,105 130,45 100,132" fill="#f8fafc" stroke="#2563eb" stroke-width="2"/>
+            <text x="10" y="110" font-weight="bold">A</text>
+            <text x="134" y="48" font-weight="bold">C</text>
+            <text x="102" y="145" font-weight="bold">B</text>
+          </svg>
+        </div>`,
+      q52_lines: `
+        <div class="my-3 flex justify-center">
+          <svg width="250" height="120" viewBox="0 0 250 120" class="bg-white border rounded p-1 text-[11px]">
+            <line x1="20" y1="22" x2="230" y2="22" stroke="#0f172a" stroke-width="2"/>
+            <text x="235" y="25" font-style="italic">l</text>
+            <line x1="20" y1="100" x2="230" y2="100" stroke="#0f172a" stroke-width="2"/>
+            <text x="235" y="103" font-style="italic">m</text>
+            <text x="165" y="18" font-weight="bold">D</text>
+            <polyline points="165,22 85,55 45,100 125,100 85,55" fill="none" stroke="#2563eb" stroke-width="2"/>
+            <text x="75" y="53" font-weight="bold">A</text>
+            <text x="35" y="113" font-weight="bold">B</text>
+            <text x="130" y="113" font-weight="bold">C</text>
+            <text x="130" y="34" font-size="10">30°</text>
+          </svg>
+        </div>`,
+      q60_star: `
+        <div class="my-3 flex justify-center">
+          <svg width="140" height="140" viewBox="0 0 140 140" class="bg-white border rounded p-1 text-[11px] font-bold">
+            <polygon points="70,10 88,54 135,54 98,82 112,128 70,100 28,128 42,82 5,54 52,54" fill="#f8fafc" stroke="#dc2626" stroke-width="2"/>
+            <text x="67" y="30">∠1</text>
+            <text x="112" y="60">∠2</text>
+            <text x="98" y="115">∠3</text>
+            <text x="33" y="115">∠4</text>
+            <text x="18" y="60">∠5</text>
+          </svg>
+        </div>`,
+      q70_embed: `
+        <div class="my-3 flex flex-col items-center">
+          <div class="text-center mb-2">
+            <svg width="90" height="90" viewBox="0 0 90 90" class="border-2 border-slate-700 bg-white">
+              <rect x="5" y="5" width="80" height="80" fill="none" stroke="#000" stroke-width="1.5"/>
+              <line x1="45" y1="5" x2="45" y2="85" stroke="#000" stroke-width="1.5"/>
+              <line x1="10" y1="10" x2="45" y2="35" stroke="#000" stroke-width="1.5"/>
+              <line x1="80" y1="10" x2="45" y2="35" stroke="#000" stroke-width="1.5"/>
+              <line x1="10" y1="10" x2="45" y2="80" stroke="#000" stroke-width="1.5"/>
+              <line x1="80" y1="10" x2="45" y2="80" stroke="#000" stroke-width="1.5"/>
+            </svg>
+            <span class="text-xs font-bold block mt-1">Figure (X)</span>
+          </div>
+        </div>`,
+      q72_puzzle: `
+        <div class="my-3 grid grid-cols-2 sm:grid-cols-4 gap-2 justify-center max-w-sm mx-auto text-xs">
+          <div class="border p-2 rounded text-center bg-white"><div class="font-bold text-indigo-700">E &nbsp; M</div><div class="my-1 border-t"></div><div class="font-black text-sm">13</div></div>
+          <div class="border p-2 rounded text-center bg-white"><div class="font-bold text-indigo-700">J &nbsp; W</div><div class="my-1 border-t"></div><div class="font-black text-sm">12</div></div>
+          <div class="border p-2 rounded text-center bg-amber-50 border-amber-300"><div class="font-bold text-indigo-700">C &nbsp; G</div><div class="my-1 border-t"></div><div class="font-black text-sm text-amber-700">?</div></div>
+          <div class="border p-2 rounded text-center bg-white"><div class="font-bold text-indigo-700">O &nbsp; R</div><div class="my-1 border-t"></div><div class="font-black text-sm">14</div></div>
+        </div>`,
+      q74_series: `
+        <div class="my-3 flex justify-center space-x-2">
+          <div class="border p-1 bg-white rounded text-center"><svg width="35" height="35" viewBox="0 0 35 35"><circle cx="17.5" cy="17.5" r="13" fill="none" stroke="#000"/><line x1="17.5" y1="4" x2="17.5" y2="17.5" stroke="#dc2626" stroke-width="2"/></svg><span class="text-[9px]">1</span></div>
+          <div class="border p-1 bg-white rounded text-center"><svg width="35" height="35" viewBox="0 0 35 35"><circle cx="17.5" cy="17.5" r="13" fill="none" stroke="#000"/><line x1="17.5" y1="17.5" x2="31" y2="17.5" stroke="#dc2626" stroke-width="2"/></svg><span class="text-[9px]">2</span></div>
+          <div class="border p-1 bg-white rounded text-center"><svg width="35" height="35" viewBox="0 0 35 35"><circle cx="17.5" cy="17.5" r="13" fill="none" stroke="#000"/><line x1="17.5" y1="17.5" x2="17.5" y2="31" stroke="#dc2626" stroke-width="2"/></svg><span class="text-[9px]">3</span></div>
+          <div class="border p-1 bg-white rounded text-center"><svg width="35" height="35" viewBox="0 0 35 35"><circle cx="17.5" cy="17.5" r="13" fill="none" stroke="#000"/><line x1="17.5" y1="17.5" x2="4" y2="17.5" stroke="#dc2626" stroke-width="2"/></svg><span class="text-[9px]">4</span></div>
+          <div class="border border-dashed p-1 bg-amber-50 rounded text-center flex items-center justify-center w-9"><span class="font-bold text-amber-700">?</span></div>
+        </div>`
+    };
+
+    // Full 80 Questions without dollar signs
+    const questionsData = [
+      // PHYSICS (1-15)
+      {
+        qId: 1,
+        subject: "Physics",
+        text: "Figure shows the variation of force acting on a body with time. Assuming the body to start from rest, the variation of its momentum with time is best represented by which plot?" + SVG_FIGURES.q1_force,
+        options: [
+          SVG_FIGURES.q1_opt1 + "<span>(1) Momentum rises to 80 kg m s⁻¹</span>",
+          SVG_FIGURES.q1_opt2 + "<span>(2) Momentum with increasing slope to 80</span>",
+          SVG_FIGURES.q1_opt3 + "<span>(3) Momentum reaches 40 kg m s⁻¹ (S-shaped curve)</span>",
+          SVG_FIGURES.q1_opt4 + "<span>(4) Momentum reaches 40 kg m s⁻¹ (Inverted curve)</span>"
+        ],
+        correct: 2,
+        solution: "Because F = dP/dt, the slope of the P-t curve represents the force. As F increases from 0 to 2 s, the slope increases (curve bends upward). From 2 to 4 s, F decreases, so the slope decreases (curve levels off). Total change in momentum = Area under F-t graph = (1/2) × 4 × 20 = 40 kg m/s."
+      },
+      {
+        qId: 2,
+        subject: "Physics",
+        text: "A ray passing through the centre of curvature of a concave mirror is reflected back along the same path after reflection. In this case:",
+        options: [
+          "(1) The angle of incidence is not equal to the angle of reflection",
+          "(2) Angle of incidence = angle of reflection = 0°",
+          "(3) The incident ray is perpendicular to the normal",
+          "(4) The incident ray makes an angle of 45° with the normal"
+        ],
+        correct: 1,
+        solution: "A ray passing through the centre of curvature strikes the spherical mirror normally. Thus the angle of incidence i = 0° and angle of reflection r = 0°."
+      },
+      {
+        qId: 3,
+        subject: "Physics",
+        text: "Rohan observes a car going away from him on a straight road doesn't change its speed. The motion of the car is said to be:",
+        options: [
+          "(1) uniform",
+          "(2) non-uniform",
+          "(3) uniformly accelerated",
+          "(4) circular"
+        ],
+        correct: 0,
+        solution: "Straight line motion with constant speed means velocity is constant, which defines uniform motion."
+      },
+      {
+        qId: 4,
+        subject: "Physics",
+        text: "A toy car of mass 10 kg moves up a ramp under the influence of force F. The work done by the force is 550 J from x = 0 to x = 11 m. Consider the ramp and flat surface is frictionless and toy car starting from rest then the maximum height attained is given by (g = 10 m/s²):" + SVG_FIGURES.q4_ramp,
+        options: [
+          "(1) 5.5 m",
+          "(2) 11 m",
+          "(3) 55 m",
+          "(4) 10 m"
+        ],
+        correct: 0,
+        solution: "Work done = Potential energy gained at maximum height: W = m·g·H. So 550 = 10 × 10 × H, which gives H = 5.5 m."
+      },
+      {
+        qId: 5,
+        subject: "Physics",
+        text: "An object is placed 20 cm from a lens and an image is formed half the size of an object. Then the lens may be:",
+        options: [
+          "(1) Concave with focal length of 20 cm.",
+          "(2) Convex with focal length of 20 cm.",
+          "(3) Concave with focal length of 10 cm.",
+          "(4) Convex with focal length of 5 cm."
+        ],
+        correct: 0,
+        solution: "For a concave lens, magnification m = +1/2 = v/u. Since u = -20 cm, v = -10 cm. Using the lens formula 1/f = 1/v - 1/u = 1/(-10) - 1/(-20) = -1/20, so f = -20 cm (concave lens of 20 cm focal length)."
+      },
+      {
+        qId: 6,
+        subject: "Physics",
+        text: "The distance between three consecutive troughs in a wave produced in a string is 4 cm. If 2.5 wave cycles pass through any point in a second, the wave in the string has velocity:",
+        options: [
+          "(1) 10 cm/s",
+          "(2) 0.16 cm/s",
+          "(3) 0.8 cm/s",
+          "(4) 5 cm/s"
+        ],
+        correct: 3,
+        solution: "Distance across 3 consecutive troughs = 2 wavelengths (2λ) = 4 cm, so λ = 2 cm. Velocity = frequency × λ = 2.5 × 2 = 5 cm/s."
+      },
+      {
+        qId: 7,
+        subject: "Physics",
+        text: "The weight of an object in the deep coal mine in Jharkhand, on a beach in Mumbai, at the top of a high hill in Shimla are W₁, W₂ and W₃ respectively, then:",
+        options: [
+          "(1) W₁ < W₂ > W₃",
+          "(2) W₁ = W₂ = W₃",
+          "(3) W₁ < W₂ < W₃",
+          "(4) W₁ > W₂ > W₃"
+        ],
+        correct: 0,
+        solution: "Gravity g is maximum at sea level (Mumbai beach, W₂). Going below the ground into a mine decreases g (W₁), and going up a hill also decreases g (W₃). Thus W₁ < W₂ > W₃."
+      },
+      {
+        qId: 8,
+        subject: "Physics",
+        text: "Which of the following four objects requires the greatest change in momentum to stop moving?<br><table class='w-full text-xs mt-2 border'><thead><tr class='bg-slate-100'><th class='p-1 border'>Object</th><th class='p-1 border'>Mass (kg)</th><th class='p-1 border'>Speed (m/s)</th></tr></thead><tbody><tr><td class='p-1 border'>Electron</td><td class='p-1 border'>10⁻³⁰</td><td class='p-1 border'>10⁷</td></tr><tr><td class='p-1 border'>Oil tanker</td><td class='p-1 border'>10⁸</td><td class='p-1 border'>10</td></tr><tr><td class='p-1 border'>Rain drop</td><td class='p-1 border'>10⁻⁴</td><td class='p-1 border'>10</td></tr><tr><td class='p-1 border'>Satellite</td><td class='p-1 border'>10³</td><td class='p-1 border'>10³</td></tr></tbody></table>",
+        options: [
+          "(1) Electron",
+          "(2) Oil tanker",
+          "(3) Rain drop",
+          "(4) Satellite"
+        ],
+        correct: 1,
+        solution: "Change in momentum Δp = m·v. For the oil tanker: 10⁸ × 10 = 10⁹ kg m/s, which is by far the largest value."
+      },
+      {
+        qId: 9,
+        subject: "Physics",
+        text: "The graph shows the variation of v with change in u for a mirror. Points plotted above the point A on the curve are for values of v (At A, v and u are equal):" + SVG_FIGURES.q9_vu,
+        options: [
+          "(1) Smaller than f",
+          "(2) Smaller than 2f",
+          "(3) Larger than 2f",
+          "(4) Smaller than f/2"
+        ],
+        correct: 2,
+        solution: "At point A on the 45° line, u = v = 2f. On the curve above A, image distance v increases while u lies between f and 2f, so v is larger than 2f."
+      },
+      {
+        qId: 10,
+        subject: "Physics",
+        text: "For motion on a straight line path with constant acceleration, the ratio of the magnitude of the displacement to the distance covered is:",
+        options: [
+          "(1) = 1",
+          "(2) ≥ 1",
+          "(3) ≤ 1",
+          "(4) Cannot be predicted"
+        ],
+        correct: 2,
+        solution: "Displacement magnitude is the shortest distance between start and finish, so it is always less than or equal to the total distance covered (≤ 1)."
+      },
+      {
+        qId: 11,
+        subject: "Physics",
+        text: "An object weighs W₁ on the Earth and W₂ on the Moon then:",
+        options: [
+          "(1) W₁ = W₂",
+          "(2) W₁ < W₂",
+          "(3) W₁ > W₂",
+          "(4) Cannot be predicted"
+        ],
+        correct: 2,
+        solution: "Earth has roughly 6 times the surface gravity of the Moon, so W₁ > W₂."
+      },
+      {
+        qId: 12,
+        subject: "Physics",
+        text: "A red light and a blue light enter the same glass medium from air. Which of the following is true?<br>(1) Both have same wavelength in glass<br>(2) Blue light experiences more bending<br>(3) Red light experiences more bending<br>(4) Red light experiences greater slowing<br>(5) Blue light experiences greater slowing",
+        options: [
+          "(1) 1, 3",
+          "(2) 2, 4",
+          "(3) 2, 5",
+          "(4) 3, 5"
+        ],
+        correct: 2,
+        solution: "Blue light has a shorter wavelength and higher refractive index in glass, causing it to bend more (2) and slow down more (5)."
+      },
+      {
+        qId: 13,
+        subject: "Physics",
+        text: "A student claps while standing in between two cliffs. He heard the third echo 2 seconds after first echo. If the speed of sound in air is assumed to be 332 m/s, find distance between the cliffs.",
+        options: [
+          "(1) 166 m",
+          "(2) 332 m",
+          "(3) 498 m",
+          "(4) 360 m"
+        ],
+        correct: 1,
+        solution: "The third echo involves round-trip reflections from both walls: the time interval between third and first echo corresponds to the reflection path from the second cliff (2d₂/v = 2 s), giving a total cliff separation of 332 m."
+      },
+      {
+        qId: 14,
+        subject: "Physics",
+        text: "One day, Chetan decided to observe the sunrise and sunset. He noted in his diary that today's sunrise was at 6:12 AM and sunset was at 6:39 PM. What must be the correct time of the actual sunrise and actual sunset?",
+        options: [
+          "(1) 6:10 AM, 6:37 PM",
+          "(2) 6:10 AM, 6:41 PM",
+          "(3) 6:14 AM, 6:37 PM",
+          "(4) 6:14 AM, 6:41 PM"
+        ],
+        correct: 2,
+        solution: "Atmospheric refraction causes early sunrise by 2 min (actual sunrise is 2 min later: 6:14 AM) and delayed sunset by 2 min (actual sunset is 2 min earlier: 6:37 PM)."
+      },
+      {
+        qId: 15,
+        subject: "Physics",
+        text: "The velocity-time graph of a particle with mass 2 kg, moving along a straight path, is provided: at t = 0, v = 10 m/s; at t = 2 s, v = 0 m/s. Calculate the total work done by the net force acting on the particle during this motion:" + SVG_FIGURES.q15_vt,
+        options: [
+          "(1) 100 J",
+          "(2) -100 J",
+          "(3) -200 J",
+          "(4) 200 J"
+        ],
+        correct: 1,
+        solution: "Work done = Change in kinetic energy = (1/2)m(v² - u²) = (1/2)(2)(0 - 10²) = -100 J."
+      },
+
+      // CHEMISTRY (16-30)
+      {
+        qId: 16,
+        subject: "Chemistry",
+        text: "If two elements X and Y react with oxygen and form their corresponding oxides i.e. X₂O, X₂O₂ and YO, YO₂. If element X has 1 proton and element Y has 6 protons then identify the correct increasing order of molecular weight of these compounds?",
+        options: [
+          "(1) YO < X₂O₂ < YO₂ < X₂O",
+          "(2) X₂O < YO < X₂O₂ < YO₂",
+          "(3) X₂O < YO < YO₂ < X₂O₂",
+          "(4) YO₂ < YO < X₂O < X₂O₂"
+        ],
+        correct: 1,
+        solution: "Element X (1 proton) is Hydrogen (H); element Y (6 protons) is Carbon (C). Molecular masses: H₂O = 18, CO = 28, H₂O₂ = 34, CO₂ = 44. Order: X₂O < YO < X₂O₂ < YO₂."
+      },
+      {
+        qId: 17,
+        subject: "Chemistry",
+        text: "Copper sulphate is reacting with sodium hydroxide to form sodium sulphate and copper hydroxide. Identify the type of reaction:<br>(i) Precipitation reaction<br>(ii) Displacement reaction<br>(iii) Double displacement reaction<br>(iv) Redox reaction",
+        options: [
+          "(1) (i) & (iv)",
+          "(2) (ii) & (iv)",
+          "(3) (i) & (iii)",
+          "(4) (iii) & (iv)"
+        ],
+        correct: 2,
+        solution: "CuSO₄ + 2NaOH → Cu(OH)₂↓ + Na₂SO₄. Insoluble copper hydroxide forms a precipitate (i) and ions exchange partners in a double displacement (iii)."
+      },
+      {
+        qId: 18,
+        subject: "Chemistry",
+        text: "The charge on the atom containing 17 protons, 18 neutrons and 18 electrons is:",
+        options: [
+          "(1) +1",
+          "(2) -2",
+          "(3) -1",
+          "(4) Zero"
+        ],
+        correct: 2,
+        solution: "Charge = Protons - Electrons = 17 - 18 = -1."
+      },
+      {
+        qId: 19,
+        subject: "Chemistry",
+        text: "A scientist named Dr. Aqua mixes 4 grams of hydrogen with 32 grams of oxygen in a sealed container and sparks a reaction to form water. Law of Constant Proportion states the mass ratio of H:O is 1:8. What mass of water will be formed in the reaction?",
+        options: [
+          "(1) 9 g water formed",
+          "(2) 36 g water formed",
+          "(3) 20 g water formed",
+          "(4) 8 g water formed"
+        ],
+        correct: 1,
+        solution: "4 g of hydrogen reacts completely with 32 g of oxygen (4:32 = 1:8). By conservation of mass, 4 g + 32 g = 36 g of water is formed."
+      },
+      {
+        qId: 20,
+        subject: "Chemistry",
+        text: "Identify the incorrect statement from the following:",
+        options: [
+          "(1) A more reactive metal displaces a less reactive metal from its salt solution.",
+          "(2) The extraction of metals from their ores and then refining them for use is known as metallurgy.",
+          "(3) An alloy is a homogeneous mixture of two or more metals or a metal and a non-metal.",
+          "(4) Non-metals form oxides which are always acidic in nature."
+        ],
+        correct: 3,
+        solution: "Statement (4) is incorrect because non-metals also form neutral oxides (such as CO, NO, and H₂O)."
+      },
+      {
+        qId: 21,
+        subject: "Chemistry",
+        text: "For the following compounds one litre aqueous solutions of equal concentration were given. The correct increasing order of hydrogen ion availability will be:",
+        options: [
+          "(1) Nitric acid < tartaric acid < distilled water < lime water",
+          "(2) Distilled water < tartaric acid < lime water < nitric acid",
+          "(3) Lime water < distilled water < tartaric acid < nitric acid",
+          "(4) Lime water < nitric acid < distilled water < tartaric acid"
+        ],
+        correct: 2,
+        solution: "Lime water (basic) has lowest [H⁺], followed by distilled water (neutral), tartaric acid (weak organic acid), and nitric acid (strong mineral acid)."
+      },
+      {
+        qId: 22,
+        subject: "Chemistry",
+        text: "One label reads: Salt: Na₂CO₃ (Sodium carbonate). What are the parent acid and parent base of this salt and will its aqueous solution be acidic, basic or neutral?",
+        options: [
+          "(1) Parent acid: H₂CO₃, Parent base: NaOH, Nature of salt solution: Basic",
+          "(2) Parent acid: HCl, Parent base: NaOH, Nature of salt solution: Neutral",
+          "(3) Parent acid: H₂CO₃, Parent base: NaOH, Nature of salt solution: Acidic",
+          "(4) Parent acid: H₂SO₄, Parent base: NaOH, Nature of salt solution: Neutral"
+        ],
+        correct: 0,
+        solution: "Na₂CO₃ is formed from weak acid H₂CO₃ (carbonic acid) and strong base NaOH, making its aqueous solution basic."
+      },
+      {
+        qId: 23,
+        subject: "Chemistry",
+        text: "Study the given flow chart carefully and fill in the blanks by choosing an appropriate option:" + SVG_FIGURES.q23_flow,
+        options: [
+          "(1) i: NaOH, ii: NH₄OH, iii: Cl₂, iv: H₂, v: Na₂O, vi: Ca(OCl)₂",
+          "(2) i: NH₄Cl, ii: NaHCO₃, iii: H₂, iv: Cl₂, v: NaOH, vi: Ca(OCl)₂",
+          "(3) i: NaHCO₃, ii: Na₂CO₃, iii: Na₂O, iv: Cl₂, v: H₂, vi: CaCl₂",
+          "(4) i: NH₄OH, ii: Na₂O, iii: H₂, iv: NaOH, v: Cl₂, vi: Ca(OCl)₂"
+        ],
+        correct: 1,
+        solution: "In Solvay process: brine + NH₃ + CO₂ produces NH₄Cl and NaHCO₃. Chlor-alkali electrolysis yields H₂, Cl₂, and NaOH. Slaked lime with chlorine gives bleaching powder Ca(OCl)₂."
+      },
+      {
+        qId: 24,
+        subject: "Chemistry",
+        text: "When a sample of copper containing impurity is purified by electrolysis, the appropriate electrodes are:",
+        options: [
+          "(1) Cathode: Pure iron, Anode: Impure sample",
+          "(2) Cathode: Impure iron, Anode: Pure copper",
+          "(3) Cathode: Pure copper, Anode: Impure sample",
+          "(4) Cathode: Impure sample, Anode: Pure copper"
+        ],
+        correct: 2,
+        solution: "Pure copper forms the cathode (where Cu²⁺ deposits as pure Cu) and impure copper forms the anode (which dissolves)."
+      },
+      {
+        qId: 25,
+        subject: "Chemistry",
+        text: "Agent Ion intercepts a redox reaction: CuO(s) + H₂(g) → Cu(s) + H₂O(l). Which one is the oxidizing agent in the reaction?",
+        options: [
+          "(1) Copper (Cu)",
+          "(2) Hydrogen (H₂)",
+          "(3) Copper(II) oxide (CuO)",
+          "(4) Water (H₂O)"
+        ],
+        correct: 2,
+        solution: "CuO supplies oxygen to hydrogen (it gets reduced to Cu), making it the oxidizing agent."
+      },
+      {
+        qId: 26,
+        subject: "Chemistry",
+        text: "If p = no. of protons, n = no. of neutrons and e = no. of electrons, then which among the following is true for Ca²⁺? (Mass no. of Ca = 40, Atomic no. = 20):",
+        options: [
+          "(1) p = 18, n = 20, e = 18",
+          "(2) p = 20, n = 18, e = 20",
+          "(3) p = 20, n = 20, e = 22",
+          "(4) p = 20, n = 20, e = 18"
+        ],
+        correct: 3,
+        solution: "Atomic number = 20 (p = 20). Neutrons n = 40 - 20 = 20. In Ca²⁺, 2 electrons are lost: e = 20 - 2 = 18."
+      },
+      {
+        qId: 27,
+        subject: "Chemistry",
+        text: "Electronic distribution of two elements P and Q in their outer most shell is shown below. Atomic number of elements P and Q will be:" + SVG_FIGURES.q27_shells,
+        options: [
+          "(1) 9, 17",
+          "(2) 15, 17",
+          "(3) 20, 17",
+          "(4) 17, 24"
+        ],
+        correct: 1,
+        solution: "Element P has 5 valence electrons in M shell: 2, 8, 5 (Z = 15). Element Q has 7 valence electrons in M shell: 2, 8, 7 (Z = 17)."
+      },
+      {
+        qId: 28,
+        subject: "Chemistry",
+        text: "Above chart represents 'Royal water' (Aqua Regia) with acid [X] and [Y]. What is [X] and [Y]?" + SVG_FIGURES.q28_pie,
+        options: [
+          "(1) X: Conc. HCl, Y: Dil. HNO₃",
+          "(2) X: Conc. HCl, Y: Conc. HNO₃",
+          "(3) X: Dil. HNO₃, Y: Conc. HCl",
+          "(4) X: Conc. HNO₃, Y: Conc. HCl"
+        ],
+        correct: 1,
+        solution: "Aqua regia is a 3:1 mixture of concentrated hydrochloric acid [X] and concentrated nitric acid [Y]."
+      },
+      {
+        qId: 29,
+        subject: "Chemistry",
+        text: "Calcium oxide reacts vigorously with water. Identify the incorrect statements:<br>1. It is an endothermic reaction.<br>2. Slaked lime is produced.<br>3. Quick lime is produced.<br>4. It is an exothermic reaction.<br>5. It is a combination reaction." + SVG_FIGURES.q29_beaker,
+        options: [
+          "(1) 1 and 2",
+          "(2) 3 and 4",
+          "(3) 1 and 3",
+          "(4) 2, 4 and 5"
+        ],
+        correct: 2,
+        solution: "CaO + H₂O → Ca(OH)₂ + Heat. It is an exothermic combination reaction. It does not produce quicklime, and it is not endothermic. Hence 1 and 3 are incorrect."
+      },
+      {
+        qId: 30,
+        subject: "Chemistry",
+        text: "Oxide 'M' is a colourless gas. It reacts with oxygen to form a reddish-brown gas oxide 'N'. Oxide 'N' is also formed by the decomposition of a compound 'X' along with the formation of a yellow residue 'Y'. Which of the following statement is correct?<br>(i) Oxide 'M' is CO and oxide 'N' is CO₂.<br>(ii) Oxide 'M' is NO₂ and acts as oxidising agent.<br>(iii) Oxide 'M' act as reducing agent.<br>(iv) Compound 'Y' is calcium oxide.",
+        options: [
+          "(1) (i) and (iv) are correct",
+          "(2) Only (ii) is correct",
+          "(3) Only (iii) is correct",
+          "(4) (ii), (iii) and (iv) are correct"
+        ],
+        correct: 2,
+        solution: "M is NO (colourless) and N is NO₂ (reddish-brown). In the reaction with oxygen, NO is oxidised to NO₂, meaning NO ('M') acts as a reducing agent."
+      },
+
+      // BIOLOGY (31-45)
+      {
+        qId: 31,
+        subject: "Biology",
+        text: "Choose the option with correct labelling for the given image related to control and coordination in human body:" + SVG_FIGURES.q31_nmj,
+        options: [
+          "(1) 1- Axon, 2- Neuromuscular junction, 3- Muscle fibre",
+          "(2) 1- Dendrite, 2- Neuromuscular junction, 3- Muscle fibre",
+          "(3) 1- Axon, 2- Dendrite, 3- Cyton",
+          "(4) 1- Muscle fibre, 2- Neuromuscular junction, 3- Axon"
+        ],
+        correct: 0,
+        solution: "1 is the motor neuron axon, 2 is the neuromuscular junction, and 3 is the muscle fibre."
+      },
+      {
+        qId: 32,
+        subject: "Biology",
+        text: "Which of the following proteolytic enzyme works at acidic pH?",
+        options: [
+          "(1) Trypsin",
+          "(2) Ptyalin",
+          "(3) Amylase",
+          "(4) Pepsin"
+        ],
+        correct: 3,
+        solution: "Pepsin operates in the acidic gastric environment (pH ~1.5 to 2.0) of the stomach."
+      },
+      {
+        qId: 33,
+        subject: "Biology",
+        text: "Refer to the given flow chart related to action of ADH in excretion. Identify 'U', 'V', 'W', & 'X': In Winters: Less sweating → U → Less conc. of ADH → X → Less reabsorption of H₂O → More urine. In Summers: More sweating → Less blood volume → V → More permeability of DCT → More reabsorption → W.",
+        options: [
+          "(1) U- More blood volume, V- More concentration of ADH, W- Less urine formation, X- Less permeability of DCT",
+          "(2) U- More blood volume, V- More concentration of ADH, W- Less urine formation, X- More permeability of DCT",
+          "(3) U- More blood volume, V- Less concentration of ADH, W- Less urine formation, X- More permeability of DCT",
+          "(4) U- More blood volume, V- More concentration of ADH, W- More urine formation, X- Less permeability of DCT"
+        ],
+        correct: 0,
+        solution: "In winter: less sweat gives more blood volume (U), reducing ADH, causing less permeability of DCT (X). In summer: more sweat causes more ADH (V) and less urine formation (W)."
+      },
+      {
+        qId: 34,
+        subject: "Biology",
+        text: "In Haryana, A farmer is advised to grow leguminous crops before growing wheat in the same field. What is the most likely reason for this practice?",
+        options: [
+          "(1) Legumes require less water & more nutrients.",
+          "(2) Legumes releases some chemicals that will kill pests specific to wheat.",
+          "(3) Legumes enrich the soil with nitrogen with the help of Rhizobium bacteria.",
+          "(4) Legumes enrich the soil with nitrogen with the help of Azolla bacteria."
+        ],
+        correct: 2,
+        solution: "Legumes form root nodules with symbiotic Rhizobium bacteria that fix atmospheric nitrogen into the soil."
+      },
+      {
+        qId: 35,
+        subject: "Biology",
+        text: "Refer to the image of hemodialysis, choose the incorrect statement regarding it:" + SVG_FIGURES.q35_dialysis,
+        options: [
+          "(1) Dialysing fluid has the same osmotic pressure as blood but it is free of nitrogenous wastes.",
+          "(2) Blood from the patient is passed through a dialyser containing a porous membrane.",
+          "(3) Artificial kidney works more efficiently than human kidney as, it involves all the essential steps of urine formation i.e. ultrafiltration, reabsorption and secretion and can secrete hormones.",
+          "(4) It is a life-saving procedure that mimics the filteration function of the kidneys when they can no longer perform adequately."
+        ],
+        correct: 2,
+        solution: "Statement (3) is false: hemodialysis only works by simple diffusion/filtration and cannot perform selective reabsorption, tubular secretion, or produce hormones."
+      },
+      {
+        qId: 36,
+        subject: "Biology",
+        text: "Match the columns: Forebrain: (b) Cerebrum, (d) Hypothalamus; Hindbrain: (a) Cerebellum, (c) Medulla oblongata. Functions: (i) Voluntary action commands, (ii) Maintains balance & posture, (iii) Largest part, (iv) Main thinking part, (v) Controls pituitary hormones, (vi) Involuntary sneeze/heartbeat, (vii) Regulates body temperature, (viii) Hunger and thirst.",
+        options: [
+          "(1) 1-a-(v), (vii), (viii); 1-d-(ii), (i); 2-b-(iii), (iv); 2-c-(vi)",
+          "(2) 1-b-(i), (iii), (iv); 1-d-(v), (vii), (viii); 2-a-(ii); 2-c-(vi)",
+          "(3) 1-a-(ii); 1-b-(i), (iii), (iv); 2-c-(v), (vii), (viii); 2-d-(vi)",
+          "(4) 1-b-(i), (ii); 1-a-(iii), (iv); 2-d-(v), (vi); 2-c-(vii), (viii)"
+        ],
+        correct: 1,
+        solution: "Cerebrum: (i, iii, iv). Hypothalamus: (v, vii, viii). Cerebellum: (ii). Medulla: (vi)."
+      },
+      {
+        qId: 37,
+        subject: "Biology",
+        text: "Refer to parts of nephron: (I) Bowman's capsule, (II) Proximal convoluted tubule (PCT), (III) Loop of Henle, (IV) Distal convoluted tubule (DCT). Match functions: (A) Maximum reabsorption occurs here, (B) Site for ultrafiltration, (C) Last part connecting to collecting duct, (D) U-shaped segment.",
+        options: [
+          "(1) I-(A), II-(C), III-(B), IV-(D)",
+          "(2) I-(A), II-(B), III-(C), IV-(D)",
+          "(3) I-(B), II-(A), III-(D), IV-(C)",
+          "(4) I-(B), II-(A), III-(C), IV-(D)"
+        ],
+        correct: 2,
+        solution: "Bowman's capsule: Ultrafiltration (B); PCT: Maximum reabsorption (A); Loop of Henle: U-shaped (D); DCT: Connects to collecting duct (C)."
+      },
+      {
+        qId: 38,
+        subject: "Biology",
+        text: "Which of the following statements correctly explains why mammals have double circulation?",
+        options: [
+          "(1) It mixes oxygen with carbon dioxide in lungs.",
+          "(2) It allows blood to be filtered by kidneys twice.",
+          "(3) It ensures that oxygenated and deoxygenated blood do not mix.",
+          "(4) It helps in faster digestion of food."
+        ],
+        correct: 2,
+        solution: "Double circulation keeps oxygen-rich and oxygen-poor blood completely separate, providing high energy and constant body temperature."
+      },
+      {
+        qId: 39,
+        subject: "Biology",
+        text: "Observe the leaf and chloroplast diagram and select the correct set of statements:<br>(I) Waxy cuticle '1' prevents excessive transpiration.<br>(II) Photosynthesis takes place in '3' because of large number of chloroplasts.<br>(III) Epidermis '2' performs photosynthesis except guard cells.<br>(IV) Bean shaped cells '4' regulate opening of chloroplast.<br>(V) '6' is site of ATP consumption.<br>(VI) '6' is light-independent, '5' is light dependent.<br>(VII) '5' is site of carbon-dioxide fixation into carbohydrates." + SVG_FIGURES.q39_leaf,
+        options: [
+          "(1) I, II, VI, VII are correct.",
+          "(2) I, III, IV, VII are correct.",
+          "(3) I, II, VII are correct.",
+          "(4) I, III, VI are correct."
+        ],
+        correct: 2,
+        solution: "Statements I, II, and VII are scientifically accurate. Epidermal cells lack chloroplasts, and stroma (5) conducts dark reaction fixation."
+      },
+      {
+        qId: 40,
+        subject: "Biology",
+        text: "If a person has trouble in maintaining a normal heart rate and blood pressure, which part of the brain is most likely to be affected?",
+        options: [
+          "(1) Cerebrum",
+          "(2) Midbrain",
+          "(3) Cerebellum",
+          "(4) Medulla Oblongata"
+        ],
+        correct: 3,
+        solution: "Cardiac and vasomotor autonomic centres reside in the medulla oblongata."
+      },
+      {
+        qId: 41,
+        subject: "Biology",
+        text: "Refer to the diagram of human circulation. Statements:<br>(i) A - Vena cava carrying oxygenated blood to heart.<br>(ii) C - Pulmonary artery carrying deoxygenated blood to lungs.<br>(iii) D - Pulmonary vein carrying deoxygenated blood to heart.<br>(iv) B - Aorta carrying deoxygenated blood to tissues.<br>(v) E - Blood changes from deoxygenated to oxygenated.<br>Select the option with INCORRECT set of statements:" + SVG_FIGURES.q41_circulation,
+        options: [
+          "(1) (i) & (ii) only",
+          "(2) (ii) and (v) only",
+          "(3) (i), (iii), (iv) & (v) only",
+          "(4) (iii) & (v) only"
+        ],
+        correct: 2,
+        solution: "Only statement (ii) is correct. All of (i), (iii), (iv), and (v) are incorrect statements."
+      },
+      {
+        qId: 42,
+        subject: "Biology",
+        text: "Look at the phototropism diagram and read statements:<br>(i) Auxin accumulates more on 'Side B'.<br>(ii) Higher auxin concentration on 'Side B' causes faster cell elongation.<br>(iii) Auxin accumulation on side 'B' results in curving of the shoot tip toward light.<br>(iv) If both sides had equal cytokinin, the shoot would bend away from light.<br>Select the option with correct set of statements:" + SVG_FIGURES.q42_tropism,
+        options: [
+          "(1) Only (i), (ii), and (iii)",
+          "(2) Only (ii) and (iv)",
+          "(3) Only (i) and (iii)",
+          "(4) Only (i) and (iv)"
+        ],
+        correct: 0,
+        solution: "Auxin moves away from sunlight to shaded side B, stimulating elongation and bending the shoot toward light."
+      },
+      {
+        qId: 43,
+        subject: "Biology",
+        text: "Refer to data table: Human at Rest: 12 breaths/min, 250 mL/min oxygen consumption; Human at Exercise: 30 breaths/min, 1000 mL/min oxygen consumption. Why does human oxygen consumption increase significantly during exercise?",
+        options: [
+          "(1) The diaphragm contracts less frequently.",
+          "(2) Muscles require more energy, increasing cellular respiration.",
+          "(3) Muscles require less energy, decreasing cellular respiration.",
+          "(4) Blood flow to the alveoli decreases."
+        ],
+        correct: 1,
+        solution: "Working muscles demand large amounts of ATP, accelerating cellular respiration and oxygen consumption."
+      },
+      {
+        qId: 44,
+        subject: "Biology",
+        text: "Unlike xylem, transport through phloem requires ATP. What is the role of ATP in the process of translocation through phloem?",
+        options: [
+          "(1) To break down glucose into starch.",
+          "(2) To pull water from phloem into xylem.",
+          "(3) To actively load sucrose into the sieve tubes that increases osmotic pressure.",
+          "(4) To open stomata for sugar movement."
+        ],
+        correct: 2,
+        solution: "Energy from ATP is used to actively load sucrose into companion cells and sieve tube elements."
+      },
+      {
+        qId: 45,
+        subject: "Biology",
+        text: "Which of the following is not the product of respiration in yeast in the absence of oxygen?",
+        options: [
+          "(1) Ethyl alcohol",
+          "(2) CO₂",
+          "(3) Both (1) & (2)",
+          "(4) Glucose"
+        ],
+        correct: 3,
+        solution: "Glucose is the starting substrate broken down during fermentation, not a product."
+      },
+
+      // MATHEMATICS (46-60)
+      {
+        qId: 46,
+        subject: "Mathematics",
+        text: "How many ordered pairs of natural numbers (a, b) satisfy a + 2b = 100?",
+        options: [
+          "(1) 40",
+          "(2) 50",
+          "(3) 49",
+          "(4) 51"
+        ],
+        correct: 2,
+        solution: "a = 100 - 2b. Since a ≥ 1, 2b ≤ 99, meaning b can take any integer value from 1 to 49. There are 49 pairs."
+      },
+      {
+        qId: 47,
+        subject: "Mathematics",
+        text: "If x² / (x + 1) = (a - b)² / (ab), then find the value of 4/x + 4/x² + 1:",
+        options: [
+          "(1) (a + b) / (a - b)",
+          "(2) ((a - b) / (a + b))²",
+          "(3) ((a + b) / (a - b))²",
+          "(4) (a - b) / (a + b)"
+        ],
+        correct: 2,
+        solution: "Inverting gives (x+1)/x² = ab/(a-b)², so 1/x + 1/x² = ab/(a-b)². Multiplying by 4 and adding 1: 1 + 4ab/(a-b)² = [(a-b)² + 4ab] / (a-b)² = (a+b)² / (a-b)²."
+      },
+      {
+        qId: 48,
+        subject: "Mathematics",
+        text: "In the given figure, the circle has radius 5m, centre 'O', AC is diameter and AB = 6m. Find the area of triangle ABC:" + SVG_FIGURES.q48_circle,
+        options: [
+          "(1) 25 m²",
+          "(2) 24 m²",
+          "(3) 40 m²",
+          "(4) 35 m²"
+        ],
+        correct: 1,
+        solution: "Angle ABC inscribed in a semicircle is 90°. Diameter AC = 10 m, AB = 6 m. By Pythagoras, BC = √(10² - 6²) = 8 m. Area = (1/2) × 6 × 8 = 24 m²."
+      },
+      {
+        qId: 49,
+        subject: "Mathematics",
+        text: "In a triangle, the average of any two sides is 6 cm more than half of the third side. Find the area of the triangle (in sq. cm):",
+        options: [
+          "(1) 64√3",
+          "(2) 36√3",
+          "(3) 12√3",
+          "(4) 48√3"
+        ],
+        correct: 1,
+        solution: "(a + b)/2 = c/2 + 6 implies a + b - c = 12. Cyclically, a = b = c = 12 cm. Area of equilateral triangle = (√3 / 4) × 12² = 36√3 cm²."
+      },
+      {
+        qId: 50,
+        subject: "Mathematics",
+        text: "If the mean of x & y is M and mean of 1/x & 1/y (x≠0, y≠0) is N, then find the value of x²y²:",
+        options: [
+          "(1) M² + N²",
+          "(2) M / N",
+          "(3) M² / N²",
+          "(4) √M / √N"
+        ],
+        correct: 2,
+        solution: "(x+y)/2 = M and (x+y)/(2xy) = N implies xy = M/N. Therefore, x²y² = M²/N²."
+      },
+      {
+        qId: 51,
+        subject: "Mathematics",
+        text: "Find the volume of the greatest right circular cone (in cm³) which can be cut from a cube of side 8 cm:",
+        options: [
+          "(1) 16π / 3",
+          "(2) 64π / 3",
+          "(3) 128π / 3",
+          "(4) 256π / 3"
+        ],
+        correct: 2,
+        solution: "Base radius r = 8/2 = 4 cm and height h = 8 cm. Volume = (1/3)π r² h = (1/3)π (16)(8) = 128π/3 cm³."
+      },
+      {
+        qId: 52,
+        subject: "Mathematics",
+        text: "In the given figure, find the measure of reflex ∠DAC if l ∥ m and AB = BC = AC:" + SVG_FIGURES.q52_lines,
+        options: [
+          "(1) 270°",
+          "(2) 240°",
+          "(3) 330°",
+          "(4) 300°"
+        ],
+        correct: 0,
+        solution: "Interior angle ∠DAC = 90°. Reflex ∠DAC = 360° - 90° = 270°."
+      },
+      {
+        qId: 53,
+        subject: "Mathematics",
+        text: "Find the number of natural numbers n, for which (n + 2)² / (n - 3) is a natural number:",
+        options: [
+          "(1) 5",
+          "(2) 6",
+          "(3) 9",
+          "(4) 3"
+        ],
+        correct: 1,
+        solution: "(n+2)² / (n-3) = n + 7 + 25/(n-3). Divisors of 25 along with permissible integer bounds give 6 natural number values for n."
+      },
+      {
+        qId: 54,
+        subject: "Mathematics",
+        text: "Find the coordinates of a point that lies on the line segment joining A(2, -1) and B(6, 3) and is twice as close to A as it is to B:",
+        options: [
+          "(1) (10/3, 1/3)",
+          "(2) (5/3, 2/3)",
+          "(3) (2/3, 5/3)",
+          "(4) (1/3, 10/3)"
+        ],
+        correct: 0,
+        solution: "Ratio AP:PB = 1:2. By section formula: x = (1·6 + 2·2)/3 = 10/3, y = (1·3 + 2·(-1))/3 = 1/3. Point is (10/3, 1/3)."
+      },
+      {
+        qId: 55,
+        subject: "Mathematics",
+        text: "Let r be a zero of the polynomial P(x) = x² + 2x + 6, then find the value of (r+2)(r+3)(r+4)(r+5):",
+        options: [
+          "(1) -126",
+          "(2) 24",
+          "(3) -24",
+          "(4) 126"
+        ],
+        correct: 3,
+        solution: "r² + 2r = -6. Pairing (r+2)(r+5) = r² + 7r + 10 = 5r + 4 and (r+3)(r+4) = 5r + 6. Their product simplifies to 126."
+      },
+      {
+        qId: 56,
+        subject: "Mathematics",
+        text: "If sec x + tan x = p, find the value of cos x in terms of p:",
+        options: [
+          "(1) 1 / (p² + 1)",
+          "(2) (p² - 1) / (p² + 1)",
+          "(3) 2p / (p² + 1)",
+          "(4) 2 / (p² + 1)"
+        ],
+        correct: 2,
+        solution: "sec x - tan x = 1/p. Adding both yields 2 sec x = p + 1/p = (p²+1)/p, so cos x = 2p / (p² + 1)."
+      },
+      {
+        qId: 57,
+        subject: "Mathematics",
+        text: "How many pairs of positive integers (x, y) satisfy the given linear equation in two variables x + 4y = 80?",
+        options: [
+          "(1) 25",
+          "(2) 30",
+          "(3) 20",
+          "(4) 19"
+        ],
+        correct: 3,
+        solution: "x = 80 - 4y > 0 gives 4y < 80, meaning y can be any integer from 1 to 19. Hence 19 pairs."
+      },
+      {
+        qId: 58,
+        subject: "Mathematics",
+        text: "If m = a cos³θ + 3a cosθ sin²θ and n = a sin³θ + 3a cos²θ sinθ, then find the value of (m+n)^(2/3) + (m-n)^(2/3):",
+        options: [
+          "(1) 2 a^(-2/3)",
+          "(2) a^(2/3)",
+          "(3) 2 a^(2/3)",
+          "(4) a^(-2/3)"
+        ],
+        correct: 2,
+        solution: "m+n = a(cosθ + sinθ)³ and m-n = a(cosθ - sinθ)³. Raising to power 2/3 and adding gives 2 a^(2/3)."
+      },
+      {
+        qId: 59,
+        subject: "Mathematics",
+        text: "A right triangle with sides 6 cm, 8 cm and 10 cm is revolved about the side 10 cm. What is the curved surface area (CSA) of the solid formed (take π = 22/7)?",
+        options: [
+          "(1) 211.2 cm²",
+          "(2) 440 cm²",
+          "(3) 264 cm²",
+          "(4) 234.6 cm²"
+        ],
+        correct: 0,
+        solution: "Common base radius r = (6 × 8)/10 = 4.8 cm. Total CSA = π r (l₁ + l₂) = (22/7) × 4.8 × 14 = 211.2 cm²."
+      },
+      {
+        qId: 60,
+        subject: "Mathematics",
+        text: "In the given figure, find the value of ∠1 + ∠2 + ∠3 + ∠4 + ∠5:" + SVG_FIGURES.q60_star,
+        options: [
+          "(1) 180°",
+          "(2) 90°",
+          "(3) 360°",
+          "(4) 540°"
+        ],
+        correct: 0,
+        solution: "For any standard 5-pointed star polygon, the sum of vertex angles is always 180°."
+      },
+
+      // MENTAL ABILITY (61-80)
+      {
+        qId: 61,
+        subject: "Mental Ability",
+        text: "Anil introduces Manas saying, 'He is the husband of the grand-daughter of the father of my father and my father is the only son to his father'. How is Manas related to Anil?",
+        options: [
+          "(1) Son-in-law",
+          "(2) Nephew",
+          "(3) Brother-in-law",
+          "(4) Father"
+        ],
+        correct: 2,
+        solution: "Father of Anil's father = Grandfather. His grand-daughter = Anil's sister. Her husband = Brother-in-law."
+      },
+      {
+        qId: 62,
+        subject: "Mental Ability",
+        text: "Rohit and Neha married on February 29, 1896, a Tuesday. They celebrate their 'real anniversary' only on February 29 when it falls on a Tuesday. Find the year of their second real anniversary celebration after 1896:",
+        options: [
+          "(1) 1908",
+          "(2) 1936",
+          "(3) 1948",
+          "(4) 1952"
+        ],
+        correct: 3,
+        solution: "1900 was a non-leap century year. Accounting for leap shifts, the first Tuesday celebration is 1924, and the second is 1952."
+      },
+      {
+        qId: 63,
+        subject: "Mental Ability",
+        text: "What was the day of the week on 18th July 1776?",
+        options: [
+          "(1) Friday",
+          "(2) Sunday",
+          "(3) Thursday",
+          "(4) Saturday"
+        ],
+        correct: 2,
+        solution: "Calculating odd days from year 0 to 1776 gives 4 odd days, which corresponds to Thursday."
+      },
+      {
+        qId: 64,
+        subject: "Mental Ability",
+        text: "Rohit's watch is one minute slow at 1:00 pm on Tuesday and 2 minutes fast at 1:00 pm on Thursday. When did it show the correct time?",
+        options: [
+          "(1) 1:00 am on Wednesday",
+          "(2) 5:00 am on Wednesday",
+          "(3) 1:00 pm on Wednesday",
+          "(4) 5:00 pm on Wednesday"
+        ],
+        correct: 1,
+        solution: "Total span = 48 hours. Total time gained = 3 minutes (1 min per 16 hrs). Watch is exact 16 hrs after Tuesday 1:00 pm, which is Wednesday 5:00 am."
+      },
+      {
+        qId: 65,
+        subject: "Mental Ability",
+        text: "If a clock shows 8:40, what will the time be in the mirror reflection?",
+        options: [
+          "(1) 3:20",
+          "(2) 4:20",
+          "(3) 5:20",
+          "(4) 3:40"
+        ],
+        correct: 0,
+        solution: "Subtract from 11:60: 11:60 - 8:40 = 3:20."
+      },
+      {
+        qId: 66,
+        subject: "Mental Ability",
+        text: "If in a certain code language, MALE = 7.75 and PLAY = 13.5 then CLASS = ?",
+        options: [
+          "(1) 12",
+          "(2) 10.8",
+          "(3) 12.8",
+          "(4) 10.2"
+        ],
+        correct: 1,
+        solution: "Sum of letters divided by count: CLASS = (3 + 12 + 1 + 19 + 19) / 5 = 54 / 5 = 10.8."
+      },
+      {
+        qId: 67,
+        subject: "Mental Ability",
+        text: "Count the number of triangles in the symmetric figure (X) shown in Q70:",
+        options: [
+          "(1) 19",
+          "(2) 22",
+          "(3) 24",
+          "(4) None of these"
+        ],
+        correct: 2,
+        solution: "Systematic counting across all symmetric compartments gives 24 triangles."
+      },
+      {
+        qId: 68,
+        subject: "Mental Ability",
+        text: "A cube of side 84 cm is painted golden on all the faces and then cut into smaller cubes of side 14 cm each. Find the number of the smaller cubes that have atleast one face painted:",
+        options: [
+          "(1) 189",
+          "(2) 91",
+          "(3) 208",
+          "(4) 152"
+        ],
+        correct: 3,
+        solution: "n = 84/14 = 6. Total cubes = 6³ = 216. Unpainted = (6-2)³ = 64. Cubes with at least one painted face = 216 - 64 = 152."
+      },
+      {
+        qId: 69,
+        subject: "Mental Ability",
+        text: "Piya and Siya starts from same point and walks 20 km in opposite directions to each other. Piya turns left and walks 15 km. Siya turns left and walks 15 km. Now, how far are they from each other?",
+        options: [
+          "(1) 20√10 km",
+          "(2) 50 km",
+          "(3) 45 km",
+          "(4) 30 km"
+        ],
+        correct: 1,
+        solution: "Horizontal span = 20 + 20 = 40 km. Vertical span = 15 + 15 = 30 km. Net distance = √(40² + 30²) = 50 km."
+      },
+      {
+        qId: 70,
+        subject: "Mental Ability",
+        text: "Find out that answer figure which is embedded in the question figure (X) without rotation:" + SVG_FIGURES.q70_embed,
+        options: [
+          "(1) Sub-pattern 1",
+          "(2) Sub-pattern 2 (Inverted triangle with vertical median)",
+          "(3) Sub-pattern 3",
+          "(4) Sub-pattern 4"
+        ],
+        correct: 1,
+        solution: "Sub-pattern 2 matches the central bottom inverted wing assembly."
+      },
+      {
+        qId: 71,
+        subject: "Mental Ability",
+        text: "In coded clock operators, after the alternating clockwise and anti-clockwise angular shifts, which statement is true?",
+        options: [
+          "(1) 6 (11:15) 4 (5:30) 1 (8:40) 2 (7:30) 3 (3:00) 1 (5:30) 8 (8:40) 4",
+          "(2) 6 (7:30) 4 (11:15) 1 (5:30) 2 (8:40) 3 (3:00) 1 (1:40) 8 (11:20) 4",
+          "(3) 6 (11:15) 4 (11:20) 1 (8:40) 2 (3:00) 3 (1:40) 1 (7:30) 8 (5:30) 4",
+          "(4) 6 (8:40) 4 (5:30) 1 (5:30) 2 (7:30) 3 (1:40) 1 (11:15) 8 (3:00) 4"
+        ],
+        correct: 1,
+        solution: "Evaluating each time position as its rotated operator satisfies equality (2)."
+      },
+      {
+        qId: 72,
+        subject: "Mental Ability",
+        text: "Find the missing number in the following figures:" + SVG_FIGURES.q72_puzzle,
+        options: [
+          "(1) 13",
+          "(2) 12",
+          "(3) 11",
+          "(4) 14"
+        ],
+        correct: 2,
+        solution: "Alphabet positions pattern yields 11."
+      },
+      {
+        qId: 73,
+        subject: "Mental Ability",
+        text: "If JEE is coded as 746 and NEET is coded as 114664, then code for ALLEN is:",
+        options: [
+          "(1) 11827855",
+          "(2) 11828755",
+          "(3) 11827585",
+          "(4) 18127855"
+        ],
+        correct: 0,
+        solution: "Pattern rule codes ALLEN as 11827855."
+      },
+      {
+        qId: 74,
+        subject: "Mental Ability",
+        text: "Select a figure which continues the series established by problem figures:" + SVG_FIGURES.q74_series,
+        options: [
+          "(1) Arrow pointing North-East",
+          "(2) Arrow pointing South-East",
+          "(3) Arrow completing rotation pointing North",
+          "(4) Arrow pointing South-West"
+        ],
+        correct: 2,
+        solution: "Pointer advances 90° clockwise at each frame, returning to the North position (3)."
+      },
+      {
+        qId: 75,
+        subject: "Mental Ability",
+        text: "Find the next term in the given series: 3, 4, 11, 60, 117, 630, ?",
+        options: [
+          "(1) 1150",
+          "(2) 1153",
+          "(3) 1165",
+          "(4) 1184"
+        ],
+        correct: 1,
+        solution: "Alternating multiplier arithmetic pattern determines the next term to be 1153."
+      },
+      {
+        qId: 76,
+        subject: "Mental Ability",
+        text: "In a queue of girls Akanksha is 9th from left and Mona is 17th from right. If positions are interchanged, Akanksha is 15th from left. Number of girls between them:",
+        options: [
+          "(1) 4",
+          "(2) 5",
+          "(3) 6",
+          "(4) 7"
+        ],
+        correct: 1,
+        solution: "Number between = 15 - 9 - 1 = 5."
+      },
+      {
+        qId: 77,
+        subject: "Mental Ability",
+        text: "If Rohan is 10th from left and Mukesh is 13th from right with 4 persons in between, find the maximum and minimum number of persons in the row:",
+        options: [
+          "(1) 27, 18",
+          "(2) 27, 17",
+          "(3) 30, 15",
+          "(4) 30, 19"
+        ],
+        correct: 1,
+        solution: "Max = 10 + 13 + 4 = 27. Min (overlap) = (10 + 13) - 4 - 2 = 17."
+      },
+      {
+        qId: 78,
+        subject: "Mental Ability",
+        text: "L, M, N, O, P, Q family members. Two couples. O (designer) married to lecturer P (father of Q and N). L has 1 son and 1 grandson (bank manager). L is married to M (actor). One lady is a housewife; there is a female teacher. Which is NOT true?",
+        options: [
+          "(1) L is a Housewife",
+          "(2) N is the daughter of P",
+          "(3) Designer is the Mother of the teacher",
+          "(4) Teacher is the daughter of M and L"
+        ],
+        correct: 3,
+        solution: "The teacher N is the daughter of O and P (granddaughter of M and L). Thus (4) is false."
+      },
+      {
+        qId: 79,
+        subject: "Mental Ability",
+        text: "A, B, C, D in a row facing north. C and D cannot be adjacent. B cannot be at 3rd seat from left. Which of the following MUST be false?",
+        options: [
+          "(1) A is at the fourth place",
+          "(2) A is at the third place",
+          "(3) A is at the second place",
+          "(4) A is at the first place"
+        ],
+        correct: 1,
+        solution: "Placing A in seat 3 makes accommodating C, D, and B without violating adjacent rules impossible."
+      },
+      {
+        qId: 80,
+        subject: "Mental Ability",
+        text: "Statements: All parrots are black. No parrots are ruler. No black are crow.<br>Conclusions: I. Some black are parrot. II. No crow is ruler.",
+        options: [
+          "(1) Only I follows",
+          "(2) Only II follows",
+          "(3) If either I or II follows",
+          "(4) Both I and II follow"
+        ],
+        correct: 0,
+        solution: "'All parrots are black' converts directly to 'Some black are parrot' (I follows). No relation between crow and ruler is given (II does not follow)."
+      }
+    ];
+
+    let currentQuestionIdx = 0;
+    const userResponses = {};
+    let timeRemainingSeconds = 120 * 60;
+    let timerInterval = null;
+    let isSubmitted = false;
+
+    questionsData.forEach(q => {
+      userResponses[q.qId] = { selectedOption: null, markedForReview: false, visited: false };
+    });
+
+    const sections = [
+      { name: "Physics", startId: 1, endId: 15 },
+      { name: "Chemistry", startId: 16, endId: 30 },
+      { name: "Biology", startId: 31, endId: 45 },
+      { name: "Mathematics", startId: 46, endId: 60 },
+      { name: "Mental Ability", startId: 61, endId: 80 }
+    ];
+
+    function initSectionTabs() {
+      const container = document.getElementById("sectionTabs");
+      container.innerHTML = "";
+      sections.forEach((sec, idx) => {
+        const btn = document.createElement("button");
+        btn.id = `tab-${sec.name.replace(/\s+/g, '')}`;
+        btn.className = `px-3 py-1 text-xs font-semibold rounded whitespace-nowrap transition ${
+          idx === 0 ? "bg-indigo-600 text-white" : "bg-slate-100 text-slate-700"
+        }`;
+        btn.textContent = `${sec.name} (${sec.startId}-${sec.endId})`;
+        btn.onclick = () => jumpToQuestion(sec.startId - 1);
+        container.appendChild(btn);
+      });
+    }
+
+    function updateSectionTabsHighlight() {
+      const curQ = questionsData[currentQuestionIdx];
+      sections.forEach(sec => {
+        const tab = document.getElementById(`tab-${sec.name.replace(/\s+/g, '')}`);
+        if (tab) {
+          tab.className = curQ.subject === sec.name
+            ? "px-3 py-1 text-xs font-semibold rounded whitespace-nowrap bg-indigo-600 text-white"
+            : "px-3 py-1 text-xs font-semibold rounded whitespace-nowrap bg-slate-100 text-slate-700";
+        }
+      });
+    }
+
+    function updateTimerDisplay() {
+      const hrs = String(Math.floor(timeRemainingSeconds / 3600)).padStart(2, '0');
+      const mins = String(Math.floor((timeRemainingSeconds % 3600) / 60)).padStart(2, '0');
+      const secs = String(timeRemainingSeconds % 60).padStart(2, '0');
+      document.getElementById("timerDisplay").textContent = `${hrs}:${mins}:${secs}`;
+    }
+
+    function startTimer() {
+      updateTimerDisplay();
+      timerInterval = setInterval(() => {
+        if (timeRemainingSeconds > 0) {
+          timeRemainingSeconds--;
+          updateTimerDisplay();
+        } else {
+          clearInterval(timerInterval);
+          alert("Time is up!");
+          submitExam();
+        }
+      }, 1000);
+    }
+
+    function renderQuestion(idx) {
+      currentQuestionIdx = idx;
+      const q = questionsData[idx];
+      const resp = userResponses[q.qId];
+      resp.visited = true;
+
+      document.getElementById("qNumberDisplay").textContent = `Q${q.qId} of ${questionsData.length}`;
+      document.getElementById("qSubjectTag").textContent = q.subject;
+
+      let html = `<div class="mb-3 font-medium text-slate-900">${q.text}</div><div class="space-y-2">`;
+      q.options.forEach((optText, oIdx) => {
+        const isChecked = resp.selectedOption === oIdx;
+        html += `
+          <label class="flex items-center p-2.5 rounded-lg border cursor-pointer transition ${
+            isChecked ? 'bg-indigo-50 border-indigo-500 ring-1 ring-indigo-500' : 'bg-slate-50 border-slate-200'
+          }">
+            <input type="radio" name="optRadio" value="${oIdx}" ${isChecked ? 'checked' : ''} class="mr-2 text-indigo-600" onchange="selectOption(${oIdx})">
+            <div class="flex-1">${optText}</div>
+          </label>`;
+      });
+      html += `</div>`;
+
+      if (isSubmitted) {
+        const isCorrect = resp.selectedOption === q.correct;
+        html += `
+          <div class="mt-4 p-3 rounded-lg border text-xs ${isCorrect ? 'bg-emerald-50 border-emerald-300 text-emerald-900' : 'bg-rose-50 border-rose-300 text-rose-900'}">
+            <strong>${isCorrect ? '✓ Correct' : '✕ Incorrect / Unattempted'}</strong> (Option ${q.correct + 1})<br>
+            <span class="text-slate-700 mt-1 block"><strong>Solution:</strong> ${q.solution}</span>
+          </div>`;
+      }
+
+      document.getElementById("questionContainer").innerHTML = html;
+      updatePalette();
+      updateSectionTabsHighlight();
+    }
+
+    function selectOption(optIdx) {
+      if (isSubmitted) return;
+      userResponses[questionsData[currentQuestionIdx].qId].selectedOption = optIdx;
+      renderQuestion(currentQuestionIdx);
+    }
+
+    function jumpToQuestion(idx) {
+      if (idx >= 0 && idx < questionsData.length) {
+        renderQuestion(idx);
+      }
+    }
+
+    function updatePalette() {
+      const palette = document.getElementById("paletteGrid");
+      palette.innerHTML = "";
+      questionsData.forEach((q, i) => {
+        const r = userResponses[q.qId];
+        let colorClass = "bg-slate-100 text-slate-700 border-slate-300";
+        if (r.markedForReview) colorClass = "bg-amber-500 text-white border-amber-600";
+        else if (r.selectedOption !== null) colorClass = "bg-emerald-600 text-white border-emerald-700";
+        else if (r.visited) colorClass = "bg-rose-500 text-white border-rose-600";
+
+        const btn = document.createElement("button");
+        btn.className = `h-7 rounded text-[11px] border flex items-center justify-center font-bold ${colorClass} ${
+          i === currentQuestionIdx ? 'ring-2 ring-indigo-500 ring-offset-1' : ''
+        }`;
+        btn.textContent = q.qId;
+        btn.onclick = () => jumpToQuestion(i);
+        palette.appendChild(btn);
+      });
+    }
+
+    document.getElementById("btnNext").onclick = () => {
+      if (currentQuestionIdx < questionsData.length - 1) jumpToQuestion(currentQuestionIdx + 1);
+    };
+    document.getElementById("btnPrev").onclick = () => {
+      if (currentQuestionIdx > 0) jumpToQuestion(currentQuestionIdx - 1);
+    };
+    document.getElementById("btnClear").onclick = () => {
+      if (isSubmitted) return;
+      userResponses[questionsData[currentQuestionIdx].qId].selectedOption = null;
+      renderQuestion(currentQuestionIdx);
+    };
+    document.getElementById("btnMarkReview").onclick = () => {
+      if (isSubmitted) return;
+      const r = userResponses[questionsData[currentQuestionIdx].qId];
+      r.markedForReview = !r.markedForReview;
+      renderQuestion(currentQuestionIdx);
+    };
+    document.getElementById("btnSubmitExam").onclick = () => {
+      if (confirm("Submit test now?")) submitExam();
+    };
+
+    function submitExam() {
+      if (isSubmitted) return;
+      isSubmitted = true;
+      clearInterval(timerInterval);
+
+      let totalScore = 0, totalCorrect = 0, totalIncorrect = 0, totalUnattempted = 0;
+      const subStats = {
+        "Physics": { total: 0, right: 0, wrong: 0, marks: 0 },
+        "Chemistry": { total: 0, right: 0, wrong: 0, marks: 0 },
+        "Biology": { total: 0, right: 0, wrong: 0, marks: 0 },
+        "Mathematics": { total: 0, right: 0, wrong: 0, marks: 0 },
+        "Mental Ability": { total: 0, right: 0, wrong: 0, marks: 0 }
+      };
+
+      questionsData.forEach(q => {
+        const r = userResponses[q.qId];
+        const s = subStats[q.subject];
+        s.total++;
+        if (r.selectedOption === null) totalUnattempted++;
+        else if (r.selectedOption === q.correct) {
+          totalCorrect++;
+          totalScore += 4;
+          s.right++;
+          s.marks += 4;
+        } else {
+          totalIncorrect++;
+          totalScore -= 1;
+          s.wrong++;
+          s.marks -= 1;
+        }
+      });
+
+      document.getElementById("resTotalScore").textContent = `${totalScore} / 320`;
+      document.getElementById("resCorrect").textContent = totalCorrect;
+      document.getElementById("resIncorrect").textContent = totalIncorrect;
+      document.getElementById("resUnattempted").textContent = totalUnattempted;
+
+      const tbody = document.getElementById("sectionSummaryRows");
+      tbody.innerHTML = "";
+      Object.keys(subStats).forEach(name => {
+        const st = subStats[name];
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td class="p-1.5 border font-semibold">${name}</td>
+          <td class="p-1.5 border text-center">${st.total}</td>
+          <td class="p-1.5 border text-center font-bold text-emerald-600">${st.right}</td>
+          <td class="p-1.5 border text-center font-bold text-rose-600">${st.wrong}</td>
+          <td class="p-1.5 border text-center font-bold">${st.marks}</td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      document.getElementById("resultModal").classList.remove("hidden");
+      document.getElementById("btnSubmitExam").classList.add("hidden");
+      renderQuestion(currentQuestionIdx);
+    }
+
+    document.getElementById("btnReviewSolutions").onclick = () => {
+      document.getElementById("resultModal").classList.add("hidden");
+      renderQuestion(0);
+    };
+
+    initSectionTabs();
+    renderQuestion(0);
+    startTimer();
+  </script>
+</body>
+</html>

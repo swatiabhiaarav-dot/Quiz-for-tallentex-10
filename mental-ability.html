@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>TALLENTEX Class 10 - Mental Ability Practice Test</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .custom-scroll::-webkit-scrollbar { width: 5px; height: 5px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 4px; }
+    svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased font-sans select-none min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-indigo-900 text-white shadow sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-3 py-2 flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <span class="bg-amber-400 text-slate-950 text-[10px] font-black uppercase px-1.5 py-0.5 rounded">TALLENTEX</span>
+        <h1 class="text-xs sm:text-base font-bold truncate max-w-[150px] sm:max-w-none">Class 10 Mental Ability</h1>
+      </div>
+      <div class="flex items-center space-x-2 sm:space-x-3">
+        <div class="text-right">
+          <span class="text-[10px] text-indigo-200 block leading-tight">Time Left</span>
+          <span id="timerDisplay" class="font-mono font-bold text-sm sm:text-lg text-amber-300">02:30:00</span>
+        </div>
+        <button id="btnPauseTimer" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs px-2 sm:px-2.5 py-1.5 rounded shadow transition">
+          ⏸ Pause
+        </button>
+        <button id="btnSubmitExam" class="bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-2.5 sm:px-3 py-1.5 rounded shadow">
+          Submit
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation / Range Bar -->
+  <div class="bg-white border-b border-slate-200 shadow-sm sticky top-[49px] z-40">
+    <div class="max-w-7xl mx-auto px-3 flex space-x-1.5 overflow-x-auto py-2 custom-scroll" id="rangeTabs">
+      <!-- Injected dynamically -->
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-3 py-3 flex-1 flex flex-col lg:flex-row gap-3 w-full">
+    
+    <!-- Question Area -->
+    <div class="flex-1 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col p-4 min-h-[500px]">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-200 mb-3">
+        <div class="flex items-center space-x-2">
+          <span class="font-bold text-slate-800 text-sm sm:text-base" id="qNumberDisplay">Question 1</span>
+          <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded border border-slate-300">Mental Ability</span>
+        </div>
+        <div class="flex items-center space-x-2 text-[11px] font-semibold">
+          <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">+4</span>
+          <span class="text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">-1</span>
+        </div>
+      </div>
+
+      <!-- Question Text -->
+      <div id="questionContainer" class="flex-1 text-slate-800 text-xs sm:text-sm leading-relaxed overflow-y-auto custom-scroll pr-1"></div>
+
+      <!-- Action Buttons -->
+      <div class="pt-3 border-t border-slate-200 mt-3 flex items-center justify-between flex-wrap gap-2">
+        <div class="flex items-center space-x-1.5">
+          <button id="btnPrev" class="px-2.5 py-1.5 rounded border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold">Prev</button>
+          <button id="btnNext" class="px-3 py-1.5 rounded bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold">Save & Next</button>
+        </div>
+        <div class="flex items-center space-x-1.5">
+          <button id="btnClear" class="px-2 py-1.5 rounded border border-slate-300 text-slate-600 hover:text-slate-900 text-xs">Clear</button>
+          <button id="btnMarkReview" class="px-2.5 py-1.5 rounded bg-amber-500 hover:bg-amber-600 text-white text-xs font-medium">Review</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Palette -->
+    <aside class="w-full lg:w-80 bg-white rounded-xl shadow-sm border border-slate-200 p-3 flex flex-col shrink-0">
+      <h2 class="font-bold text-slate-800 text-xs mb-2">Question Palette (100 Questions)</h2>
+      <div class="grid grid-cols-2 gap-1.5 text-[10px] text-slate-600 mb-2 pb-2 border-b border-slate-200">
+        <div class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded bg-emerald-500"></span><span>Answered</span></div>
+        <div class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded bg-amber-500"></span><span>Review</span></div>
+        <div class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded bg-rose-500"></span><span>Unanswered</span></div>
+        <div class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded bg-slate-200 border"></span><span>Not Visited</span></div>
+      </div>
+      <div id="paletteGrid" class="grid grid-cols-10 lg:grid-cols-8 gap-1 overflow-y-auto max-h-[300px] lg:max-h-[470px] custom-scroll p-1"></div>
+    </aside>
+  </main>
+
+  <!-- Result Modal -->
+  <div id="resultModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 overflow-y-auto">
+    <div class="bg-white rounded-xl max-w-2xl w-full p-4 sm:p-6 shadow-2xl max-h-[92vh] overflow-y-auto custom-scroll">
+      <div class="text-center pb-3 border-b border-slate-200">
+        <span class="bg-indigo-100 text-indigo-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Official Results</span>
+        <h2 class="text-xl font-black text-slate-900 mt-1">Class 10 Mental Ability Practice Test</h2>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 my-4">
+        <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-2 text-center">
+          <span class="text-[10px] font-semibold text-indigo-600 block">Total Score</span>
+          <span id="resTotalScore" class="text-lg font-black text-indigo-900">0 / 400</span>
+        </div>
+        <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-2 text-center">
+          <span class="text-[10px] font-semibold text-emerald-600 block">Correct (+4)</span>
+          <span id="resCorrect" class="text-lg font-black text-emerald-900">0</span>
+        </div>
+        <div class="bg-rose-50 border border-rose-200 rounded-lg p-2 text-center">
+          <span class="text-[10px] font-semibold text-rose-600 block">Wrong (-1)</span>
+          <span id="resIncorrect" class="text-lg font-black text-rose-900">0</span>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 rounded-lg p-2 text-center">
+          <span class="text-[10px] font-semibold text-slate-600 block">Unattempted</span>
+          <span id="resUnattempted" class="text-lg font-black text-slate-800">0</span>
+        </div>
+      </div>
+      <div class="flex justify-end pt-2 border-t border-slate-200">
+        <button id="btnReviewSolutions" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs px-4 py-2 rounded-lg">
+          Review Answers with Official Key
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Inline Vector Figures for Visual Questions
+    const SVGS = {
+      q4: `<div class="my-2 flex justify-center"><svg width="220" height="40" viewBox="0 0 220 40" class="border rounded bg-white p-1"><text x="15" y="25" font-size="16" font-family="monospace" font-weight="bold">(A) 333</text><text x="110" y="25" font-size="16" font-family="monospace" font-weight="bold">(B) 333333</text></svg></div>`,
+      q7: `<div class="my-3 flex justify-center space-x-2 text-xs font-bold"><div class="border p-2 rounded bg-white text-center w-20"><div>22 &nbsp; 6</div><div class="my-1 text-rose-600 font-black">27</div><div>13 &nbsp; 17</div></div><div class="border p-2 rounded bg-white text-center w-20"><div>2 &nbsp; 42</div><div class="my-1 text-rose-600 font-black">10</div><div>16 &nbsp; 8</div></div><div class="border p-2 rounded bg-amber-50 border-amber-300 text-center w-20"><div>26 &nbsp; 7</div><div class="my-1 text-amber-700 font-black text-sm">?</div><div>9 &nbsp; 8</div></div></div>`,
+      q12: `<div class="my-2 flex justify-center"><svg width="60" height="60" viewBox="0 0 60 60" class="border rounded bg-white p-1"><polyline points="15,45 30,15 45,45" fill="none" stroke="#000" stroke-width="2"/><line x1="20" y1="35" x2="40" y2="35" stroke="#000" stroke-width="2"/></svg></div>`,
+      q15: `<div class="my-2 flex justify-center"><svg width="90" height="70" viewBox="0 0 90 70" class="border rounded bg-white"><rect x="15" y="10" width="60" height="45" fill="none" stroke="#000" stroke-width="1.5"/><line x1="45" y1="10" x2="45" y2="55" stroke="#000" stroke-width="1.5"/><line x1="15" y1="32" x2="75" y2="32" stroke="#000" stroke-width="1.5"/></svg></div>`,
+      q19: `<div class="my-3 flex justify-center space-x-3 text-xs font-bold"><div class="border p-2 rounded bg-white text-center w-16"><div>6 &nbsp; 8</div><div class="my-1 text-rose-600 font-black">861</div><div>7 &nbsp; 9</div></div><div class="border p-2 rounded bg-white text-center w-16"><div>6 &nbsp; 4</div><div class="my-1 text-rose-600 font-black">261</div><div>4 &nbsp; 3</div></div><div class="border p-2 rounded bg-amber-50 border-amber-300 text-center w-16"><div>8 &nbsp; 4</div><div class="my-1 text-amber-700 font-black">422</div><div>? &nbsp; 16</div></div></div>`,
+      q27: `<div class="my-3 flex justify-center space-x-2 text-xs font-bold"><div class="border p-1.5 rounded bg-white text-center w-20"><div>19 &nbsp; 75</div><div class="text-rose-600">31 &nbsp; 52</div><div>23 &nbsp; 84</div><div class="text-blue-600 font-black">57</div></div><div class="border p-1.5 rounded bg-white text-center w-20"><div>53 &nbsp; 48</div><div class="text-rose-600">66 &nbsp; 41</div><div>65 &nbsp; 27</div><div class="text-blue-600 font-black">77</div></div><div class="border p-1.5 rounded bg-amber-50 border-amber-300 text-center w-20"><div>? &nbsp; 35</div><div class="text-rose-600">27 &nbsp; 38</div><div>31 &nbsp; ?</div><div class="text-amber-700 font-black">?</div></div></div>`,
+      q30: `<div class="my-2 flex justify-center"><svg width="80" height="80" viewBox="0 0 80 80" class="border rounded bg-white"><polygon points="40,10 70,70 10,70" fill="none" stroke="#000" stroke-width="1.5"/><line x1="40" y1="10" x2="40" y2="70" stroke="#000" stroke-width="1.5"/><line x1="25" y1="40" x2="55" y2="40" stroke="#000" stroke-width="1.5"/></svg></div>`,
+      q36: `<div class="my-3 flex justify-center space-x-2 text-xs font-bold"><div class="border p-1.5 rounded bg-white text-center w-20"><div>5 &nbsp; 8 &nbsp; 7</div><div class="text-rose-600 my-0.5">367</div><div>2 &nbsp; 4 &nbsp; 9</div></div><div class="border p-1.5 rounded bg-white text-center w-20"><div>9 &nbsp; 7 &nbsp; 9</div><div class="text-rose-600 my-0.5">280</div><div>6 &nbsp; 9 &nbsp; 5</div></div><div class="border p-1.5 rounded bg-amber-50 border-amber-300 text-center w-20"><div>4 &nbsp; 5 &nbsp; 8</div><div class="text-amber-700 my-0.5 font-black">?</div><div>3 &nbsp; 7 &nbsp; 2</div></div></div>`,
+      q39: `<div class="my-2 flex justify-center"><svg width="60" height="60" viewBox="0 0 60 60" class="border rounded bg-white"><polyline points="15,15 45,15 45,35 15,35 15,50" fill="none" stroke="#000" stroke-width="2"/></svg></div>`,
+      q41: `<div class="my-2 flex justify-center"><svg width="220" height="50" viewBox="0 0 220 50" class="border rounded bg-white"><text x="15" y="30" font-family="monospace" font-size="14">|||| &nbsp; (||| &nbsp; )(|| &nbsp; |)(|| &nbsp; |)1(</text></svg></div>`,
+      q50: `<div class="my-2 flex justify-center"><svg width="80" height="80" viewBox="0 0 80 80" class="border rounded bg-white"><rect x="10" y="10" width="60" height="60" fill="none" stroke="#000" stroke-width="1.5"/><line x1="30" y1="10" x2="30" y2="70" stroke="#000"/><line x1="50" y1="10" x2="50" y2="70" stroke="#000"/><line x1="10" y1="30" x2="70" y2="30" stroke="#000"/><line x1="10" y1="50" x2="70" y2="50" stroke="#000"/></svg></div>`,
+      q56: `<div class="my-3 flex justify-center space-x-3 text-xs font-bold"><div class="border p-1.5 rounded bg-white text-center w-20"><div>4 &nbsp; 5</div><div class="text-rose-600 my-0.5">1625</div><div>3 &nbsp; 7</div><div class="text-blue-600">949</div></div><div class="border p-1.5 rounded bg-amber-50 border-amber-300 text-center w-20"><div>8 &nbsp; 1</div><div class="text-amber-700 my-0.5">641</div><div>? &nbsp; 2</div><div class="text-amber-700">?</div></div></div>`,
+      q59: `<div class="my-2 flex justify-center"><svg width="60" height="60" viewBox="0 0 60 60" class="border rounded bg-white"><path d="M 15,15 L 45,15 L 45,45 L 30,45" fill="none" stroke="#000" stroke-width="2"/></svg></div>`,
+      q67: `<div class="my-2 flex justify-center"><svg width="90" height="70" viewBox="0 0 90 70" class="border rounded bg-white"><rect x="15" y="10" width="60" height="45" fill="none" stroke="#000" stroke-width="1.5"/><line x1="35" y1="10" x2="35" y2="55" stroke="#000"/><line x1="55" y1="10" x2="55" y2="55" stroke="#000"/><line x1="15" y1="32" x2="75" y2="32" stroke="#000"/></svg></div>`,
+      q70: `<div class="my-2 flex justify-center"><svg width="60" height="60" viewBox="0 0 60 60" class="border rounded bg-white"><polyline points="45,10 25,30 45,30 20,50" fill="none" stroke="#000" stroke-width="2"/></svg></div>`,
+      q71: `<div class="my-2 flex justify-center font-mono font-bold text-sm bg-white p-2 border rounded text-center">□ □ □<br>□ □ ○<br>+ □ △ △<br>--------<br>2 0 0 3</div>`,
+      q72: `<div class="my-3 flex justify-center space-x-3 text-xs font-bold"><div class="border p-2 rounded bg-white text-center w-16"><div>2 &nbsp; 7 &nbsp; 1</div><div class="text-rose-600 my-1 font-black">9</div><div>3 &nbsp; 4</div></div><div class="border p-2 rounded bg-white text-center w-16"><div>3 &nbsp; 5 &nbsp; 2</div><div class="text-rose-600 my-1 font-black">5</div><div>4 &nbsp; 3</div></div><div class="border p-2 rounded bg-amber-50 border-amber-300 text-center w-16"><div>9 &nbsp; 2 &nbsp; 3</div><div class="text-amber-700 my-1 font-black text-sm">?</div><div>4 &nbsp; 6</div></div></div>`,
+      q75: `<div class="my-2 flex justify-center"><svg width="180" height="40" viewBox="0 0 180 40" class="border rounded bg-white p-1"><circle cx="20" cy="20" r="10" fill="none" stroke="#000"/><circle cx="20" cy="20" r="3" fill="#000"/><circle cx="50" cy="20" r="10" fill="none" stroke="#000"/><line x1="50" y1="10" x2="50" y2="30" stroke="#000"/><circle cx="80" cy="20" r="10" fill="none" stroke="#000"/><circle cx="80" cy="20" r="4" fill="none" stroke="#000"/><circle cx="110" cy="20" r="10" fill="none" stroke="#000"/><line x1="103" y1="13" x2="117" y2="27" stroke="#000"/><line x1="103" y1="27" x2="117" y2="13" stroke="#000"/><circle cx="140" cy="20" r="10" fill="none" stroke="#000"/><circle cx="140" cy="20" r="6" fill="none" stroke="#000"/></svg></div>`,
+      q87: `<div class="my-2 flex justify-center"><svg width="90" height="70" viewBox="0 0 90 70" class="border rounded bg-white"><rect x="15" y="10" width="60" height="50" fill="none" stroke="#000" stroke-width="1.5"/><line x1="15" y1="10" x2="75" y2="60" stroke="#000"/><line x1="75" y1="10" x2="15" y2="60" stroke="#000"/><line x1="45" y1="10" x2="45" y2="60" stroke="#000"/></svg></div>`,
+      q90: `<div class="my-2 flex justify-center"><svg width="60" height="60" viewBox="0 0 60 60" class="border rounded bg-white"><polygon points="15,15 45,15 45,45 15,45" fill="none" stroke="#000"/><line x1="15" y1="15" x2="45" y2="45" stroke="#000"/><line x1="15" y1="45" x2="45" y2="15" stroke="#000"/></svg></div>`,
+      q92: `<div class="my-3 flex justify-center space-x-2 text-xs font-bold"><div class="border p-1.5 rounded bg-white text-center w-16"><div>4 &nbsp; 2</div><div class="text-rose-600 my-0.5">53</div><div>7 &nbsp; 3</div></div><div class="border p-1.5 rounded bg-white text-center w-16"><div>1 &nbsp; 3</div><div class="text-rose-600 my-0.5">23</div><div>7 &nbsp; 8</div></div><div class="border p-1.5 rounded bg-white text-center w-16"><div>9 &nbsp; 4</div><div class="text-rose-600 my-0.5">42</div><div>0 &nbsp; 7</div></div><div class="border p-1.5 rounded bg-amber-50 border-amber-300 text-center w-16"><div>2 &nbsp; 9</div><div class="text-amber-700 my-0.5 font-black">?</div><div>4 &nbsp; 12</div></div></div>`
+    };
+
+    // Official Answer Key Array for Q1-100 (Indexed 0-3 for choices 1-4)
+    // Ans row from official sheet: [2,3,4,4,4,1,3,3,3,1, 2,4,3,1,4, 3,4,4,2,1, 1,2,2,4,3, 2,4,2,1,4, 2,3,3,4,4, 2,1,4,1,3, 4,4,2,1,4, 2,1,1,1,3, 1,3,4,1,1, 4,4,4,1,3, 1,4,3,3,2, 3,2,4,4,1, 1,3,4,3,2, 2,4,2,4,3, 2,4,3,2,2, 3,1,1,1,4, 4,1,3,4,1, 3,3,3,4,2]
+    const officialAns = [
+      1, 2, 3, 3, 3, 0, 2, 2, 2, 0,
+      1, 3, 2, 0, 3, 2, 3, 3, 1, 0,
+      0, 1, 1, 3, 2, 1, 3, 1, 0, 3,
+      1, 2, 2, 3, 3, 1, 0, 3, 0, 2,
+      3, 3, 1, 0, 3, 1, 0, 0, 0, 2,
+      0, 2, 3, 0, 0, 3, 3, 3, 0, 2,
+      0, 3, 2, 2, 1, 2, 1, 3, 3, 0,
+      0, 2, 3, 2, 1, 1, 3, 1, 3, 2,
+      1, 3, 2, 1, 1, 2, 0, 0, 0, 3,
+      3, 0, 2, 3, 0, 2, 2, 2, 3, 1
+    ];
+
+    // Full 100 Questions Data
+    const rawQuestions = [
+      { text: "The position of how many letters in the word FORGET remains unchanged when they are arranged in alphabetical order?", opts: ["Two", "One", "Three", "More than three"] },
+      { text: "In a cricket season, India defeated Australia twice, West Indies defeated India twice, Australia defeated West Indies twice, India defeated New Zealand twice, and West Indies defeated New Zealand twice. Which country has lost most number of times?", opts: ["India", "Australia", "New Zealand", "West Indies"] },
+      { text: "If the letter in each of the following five groups of letters are first arranged in alphabetical order and then arranged as in a dictionary, which letter group would be in the middle?<br>MEET, DEAF, ROAD, CODE, LACK", opts: ["LACK", "MEET", "DEAF", "ROAD"] },
+      { text: "Which figure will continue the same series given in problem figure?" + SVGS.q4, opts: ["(1)", "(2)", "(3)", "(4)"] },
+      { text: "Study the arrangement: TSFJUVPQADBCEZLWYHIGKMONRX. Which letter is eighth to the right of the letter which is exactly middle between T and Y?", opts: ["C", "H", "W", "Y"] },
+      { text: "Pramod, Qureshi, Ranjit, Survesh and Tushar sit around a circular table. Ranjit is to the right of Pramod and is second to left of Survesh. Tushar is not between Pramod and Survesh. Who is second to left of Ranjit?", opts: ["Qureshi", "Survesh", "Tushar", "Can't be determined"] },
+      { text: "Which number will replace the question mark in the third set of numbers?" + SVGS.q7, opts: ["48", "38", "40", "52"] },
+      { text: "If the first four letters of 'ANTHROPOMORPHISM' are rewritten in reverse order, followed by the next four rewritten in reverse order and so on, which letter will be twelfth from left end?", opts: ["O", "H", "M", "P"] },
+      { text: "A block 5 cm × 4 cm × 3 cm is painted (opposite 5×4 red, opposite 4×3 blue, rest 5×3 green). Cut into 1 cm cubes. How many cubes have at most two faces coloured?", opts: ["22", "24", "46", "None of these"] },
+      { text: "Statements: All packets are tents. All tents are houses. Some boxes are houses.<br>Conclusions: I. Some houses are packets. II. Some boxes are tents.", opts: ["If only conclusion I follows", "If only conclusion II follows", "If either I or II follows", "If neither I nor II follows"] },
+      { text: "Five teachers: A & B teach Hindi & English. C & D teach English & Geography. D & A teach Maths & Hindi. E & B teach History & French. Who teaches maximum number of subjects?", opts: ["A", "B", "C", "E"] },
+      { text: "Figure (X) is embedded in one of the alternatives. Trace it:" + SVGS.q12, opts: ["(1)", "(2)", "(3)", "(4)"] },
+      { text: "Statements: All Chilies are Garlics. Some Garlics are Onions. All Onions are Potatoes. No Potato is Ginger.<br>Conclusions: I. No Onion is Ginger. II. Some Garlics are Potatoes. III. Some Chillies are Potatoes.", opts: ["Only I follows", "Only II follows", "Only I & II follows", "Only I & III follows"] },
+      { text: "Rohan introduces Sahil as the 'son of the only brother of his father's wife'. How is Sahil related to Rohan?", opts: ["Cousin", "Son", "Uncle", "Brother"] },
+      { text: "How many rectangles are there in the given figure?" + SVGS.q15, opts: ["6", "7", "8", "9"] },
+      { text: "If X is brother of son of Y's son, then how is X related to Y?", opts: ["Brother", "Cousin", "Grandson", "Son"] },
+      { text: "If you count 21 letters from the end of the English alphabet and 20 letters from beginning, which letter appears in the middle of sequence?", opts: ["N", "L", "K", "M"] },
+      { text: "If A is south of B & C is east of B, in what direction is A with respect to C?", opts: ["North - East", "North - West", "South - East", "South - West"] },
+      { text: "Find the missing number in the place of question mark:" + SVGS.q19, opts: ["8", "7", "4", "16"] },
+      { text: "If RAVE is coded as SXWB, then how will SCAW be coded?", opts: ["TZBT", "TZBK", "PZXK", "TVXK"] },
+      { text: "Pick up from answer figures one which continues the problem series:", opts: ["Option (1)", "Option (2)", "Option (3)", "Option (4)"] },
+      { text: "In a class, 20% own only two cars each, 40% of the remaining own three cars each, and the rest own only one car each. Which statement is definitely true?", opts: ["Only 20% own three cars", "48% of total members own only one car each", "60% own at least two cars", "80% own at least one car"] },
+      { text: "Nitin's age was equal to square of some number last year and the following year it would be cube of a number. To reach next cube, how long must he wait?", opts: ["10 years", "38 years", "39 years", "64 years"] },
+      { text: "Shoe boxes pattern: 459 pieces, 153 pieces, 51 pieces, and one smaller box. How many pieces in the smaller box?", opts: ["15", "37", "27", "17"] },
+      { text: "Elephant eats daily carrots equal to what a rabbit eats in 1 year (365 days). Together in one day they eat 111 kg. How much does rabbit eat in one day?", opts: ["1/2", "111/165", "37/122", "19/61"] },
+      { text: "How many days are there in x weeks x days?", opts: ["7x²", "8x", "14x", "7"] },
+      { text: "Which number will replace question mark in the figure?" + SVGS.q27, opts: ["27", "31", "35", "38"] },
+      { text: "Statements: All tables are jugs. No jug is rod. Some rods are hills.<br>Conclusions: I. Some rods are tables. II. Some jugs are tables. III. Some hills are jugs.", opts: ["Only I follows", "Only II follows", "Only III follows", "I and II follow"] },
+      { text: "If (X × Y) means X is brother of Y; (X + Y) means X is daughter of Y; (X - Y) means X is husband of Y. If (A + B - C) then:", opts: ["C is mother of A", "C is sister-in-law of A", "C is aunt of A", "C is mother-in-law of A"] },
+      { text: "How many triangles are there in the following figure?" + SVGS.q30, opts: ["15", "16", "18", "None of these"] },
+      { text: "Introducing a girl, Vipin said, 'Her mother is the only daughter of my mother-in-law'. How is Vipin related to the girl?", opts: ["Uncle", "Father", "Brother", "Husband"] },
+      { text: "Three pillars x, y, z. Spider A climbs 5cm slips 1cm (net 4cm). Spider B climbs 6cm slips 3cm (net 3cm). Spider C climbs 7cm slips 2cm (net 5cm). Each takes 50 chances. Shortest pillar height is:", opts: ["144 cm", "152 cm", "153 cm", "141 cm"] },
+      { text: "7 friends playing cards in circle: Firoz 2nd right of Gaurav; Bharat neighbour of Firoz not Esha; Esha neighbour of Chandan is 4th right of Gaurav; Deepak between Esha and Ashish. Who is fourth to left of Gaurav?", opts: ["Deepak", "Esha", "Chandan", "Can't be determined"] },
+      { text: "Naveen walked 30m west, turned right walked 80m, turned left walked 30m. In which direction is he from starting point?", opts: ["East", "South-East", "North-East", "North-West"] },
+      { text: "Veronika walked 90m north, turned left walked 35m, turned left walked 40m, finally turned right at 45°. In which direction was she moving finally?", opts: ["North-East", "North-West", "South-East", "South-West"] },
+      { text: "Find the missing character in the star pattern:" + SVGS.q36, opts: ["789", "367", "673", "None of these"] },
+      { text: "If DIAMOND is coded as VQYMKLV, how is FEMALE coded?", opts: ["TUMYNU", "UVNZOV", "UVNYNV", "TVNYNV"] },
+      { text: "Sales rep schedule: Visit M before N and R; N before Q; 3rd company is P. Which company can she NOT visit immediately after P?", opts: ["S", "R", "Q", "M"] },
+      { text: "Find alternative containing embedded figure (X):" + SVGS.q39, opts: ["(1)", "(2)", "(3)", "(4)"] },
+      { text: "Statements: All biscuits are table. Some tables are brushes. All brushes are colours.<br>Conclusions: I. Some colours are biscuits. II. Some brushes are biscuits. III. Some colours are tables.", opts: ["None follows", "Only II follows", "Only III follows", "I and II follows"] },
+      { text: "Select figure that continues series A, B, C, D, E:" + SVGS.q41, opts: ["(1)", "(2)", "(3)", "(4)"] },
+      { text: "Sangeeta remembers father's birthday after 8th but before 13th Dec. Natasha remembers after 9th but before 14th Dec. Date of birthday is:", opts: ["10th", "11th", "12th", "Data inadequate"] },
+      { text: "Code symbols arithmetic evaluation. Which alternative is correct?", opts: ["Option (1)", "Option (2)", "Option (3)", "None of these"] },
+      { text: "How many 7's are immediately followed by 6 as well as immediately preceded by 8 in: 5 7 6 8 7 7 6 8 7 8 7 6 5 4 7 8 7 6 8 7 6 4 8 7 6", opts: ["4", "3", "2", "1"] },
+      { text: "In a 30-day month starting on Saturday, if every second Saturday and all Sundays are holidays, how many working days?", opts: ["20", "21", "22", "23"] },
+      { text: "Ajay left home 15 min earlier than usual. Takes 10 min to reach stop. Reached at 8:40 AM. What time does he usually leave home?", opts: ["8:30 AM", "8:45 AM", "8:55 AM", "None of these"] },
+      { text: "Cube cut into 343 smaller cubes. N cubes are not coloured on any face. Which best describes N?", opts: ["120 < N < 130", "120 < N < 125", "110 < N < 120", "50 < N < 100"] },
+      { text: "Statements: Some bottles are drinks. All drinks are cups.<br>Conclusions: I. Some bottles are cups. II. Some cups are drinks. III. All drinks are bottles. IV. All cups are drinks.", opts: ["Only I and II follow", "Only II and III follow", "Only II and IV follow", "Only I and IV follow"] },
+      { text: "Soni says to Preeti: 'Your mother Shyama is youngest sister of my father, Dubey's Father's son is Prabhat.' How is Prabhat related to Preeti?", opts: ["Uncle", "Father", "Grandmother", "Father-in-law"] },
+      { text: "How many squares in the given figure?" + SVGS.q50, opts: ["19", "20", "18", "16"] },
+      { text: "Mohan is son of Arun's father's sister. Prakash is son of Reva (mother of Vikas, grandmother of Arun). Pranab is father of Neeta and grandfather of Mohan. Reva is wife of Pranab. How is Mohan related to Reva?", opts: ["Grandson", "Son", "Nephew", "Data inadequate"] },
+      { text: "Monday falls on 4th April, 1998. What was the day on 5th May, 1998?", opts: ["Monday", "Sunday", "Thursday", "Wednesday"] },
+      { text: "A, B, C, D, E, F in circle facing centre. D is between F and B. A is 2nd left of D and 2nd right of E. Who is facing A?", opts: ["B", "D", "F", "Either F or B"] },
+      { text: "Stella says: 'He is son of the only son of my grandmother and I am only daughter of my parents'. How is he related to Stella?", opts: ["Brother", "Uncle", "Cousin", "Nephew"] },
+      { text: "Tree at center of circular road is 20 km from point A. Drive 20 km to tree, then drive from tree to point between B and C on ring road. Distance from tree is:", opts: ["20km", "15km", "80km", "40km"] },
+      { text: "Find the missing character in the box pattern:" + SVGS.q56, opts: ["2", "3", "4", "1"] },
+      { text: "If 453945 stands for DECIDE, what does 8978 stand for?", opts: ["BHEE", "CDEH", "GHEE", "HIGH"] },
+      { text: "Girls skills matrix: Who is good in studies, GK, Athletics and Biology?", opts: ["Anjali", "Babita", "Laxmi", "Dimple"] },
+      { text: "Find alternative figure with embedded figure (X):" + SVGS.q59, opts: ["(1)", "(2)", "(3)", "(4)"] },
+      { text: "Statements: Some pencils are pens. All pens are buses. Some buses are trucks.<br>Conclusions: I. Some trucks are pencils. II. Some buses are pencils. III. No truck is pencil.", opts: ["Only I follows", "Only II follows", "Either I or III and II follows", "Either I or III follows"] },
+      { text: "Babita is Ajay's wife and Chiranjiv is Divya's father. If Ajay's mother-in-law is wife of Divya's grandfather, what is Babita's relation with Chiranjiv's wife?", opts: ["Sister-in-law", "Sister", "Cousin", "Nephew"] },
+      { text: "If 14th February, 2011 is Monday, what will be day on 14th February, 2013?", opts: ["Friday", "Tuesday", "Wednesday", "Thursday"] },
+      { text: "If P > Q, Q > R & R > S, which conclusion is definitely wrong?", opts: ["P > S", "P > R", "S > P", "Q > S"] },
+      { text: "Mathematical symbol mapping deduction: If x □ y × z it implies:", opts: ["Option (1)", "Option (2)", "Option (3)", "Option (4)"] },
+      { text: "If x × y Δ z, it follows that:", opts: ["z + y ⊙ x", "x ⊙ y + z", "y C x × z", "x φ z Δ y"] },
+      { text: "If SOME = 13, CAN = 6, then PAINT = ?", opts: ["15", "60", "12", "20"] },
+      { text: "Find the number of rectangles in the figure:" + SVGS.q67, opts: ["25", "29", "28", "None of these"] },
+      { text: "Dev says to Rohini: 'He is son of your father's only son-in-law'. How is Rohini related to Manish?", opts: ["Daughter", "Aunt", "Sister", "Mother"] },
+      { text: "Shop displacement coordinates: Find direction of Vegetable shop w.r.t Grains shop, and distance between Spinach shop and Flower shop:", opts: ["South-West, 23m", "South-East, 17m", "North-East, 23m", "South-West, 17m"] },
+      { text: "Find alternative figure containing embedded figure (X):" + SVGS.q70, opts: ["(1)", "(2)", "(3)", "(4)"] },
+      { text: "In the cryptarithm addition, what is the sum of Square + Circle?" + SVGS.q71, opts: ["6", "7", "8", "9"] },
+      { text: "Find the missing term in the star figure:" + SVGS.q72, opts: ["4", "7", "10", "11"] },
+      { text: "Statements: N @ I, I % G, G $ P.<br>Conclusions: I. P < N &nbsp; II. G < N", opts: ["Only I is true", "Only II is true", "Either I or II is true", "Both I and II are true"] },
+      { text: "Statements: S % Q, Y @ Q, Y @ U.<br>Conclusions: I. U < Q &nbsp; II. U $ Q", opts: ["Only I is true", "Only II is true", "Either I or II is true", "Both I and II are true"] },
+      { text: "Find next figure in series:" + SVGS.q75, opts: ["Option (1)", "Option (2)", "Option (3)", "Option (4)"] },
+      { text: "In a row of 30 boys, P is 4th from right, W is 10th from left. How many boys between P and W?", opts: ["15", "16", "17", "20"] },
+      { text: "Row seating: Deep sits exactly middle of Roop and Gaur. Deep to Roop is twice right of Roop (Roop is 58th from left). Deep's position from right is:", opts: ["20th", "25th", "30th", "35th"] },
+      { text: "Card game points: B (mother of A) got more points than husband; D > E but < F; Niece of E got lowest; Father of A > F but did not win. Who won?", opts: ["A", "B", "D", "F"] },
+      { text: "Couples circle seating alternating men and women. Who sat to the right of Mr. Abraham?", opts: ["Mrs. Dennis", "Mrs. Elmer", "Mrs. Border", "Mrs. Border or Mrs. Dennis"] },
+      { text: "Statements: All animals are human. All tigers are human.<br>Conclusions: I. Some tigers are animals. II. No tiger is animals.", opts: ["Only I follows", "Only II follows", "Either I or II follows", "Neither I nor II follows"] },
+      { text: "Lady says: 'His sister is daughter of my father's son's mother'. How is person related to lady?", opts: ["Sister", "Brother", "Nephew", "Father"] },
+      { text: "If 20th Feb 1996 was Tuesday (leap year), on what day of week will birthday fall in 1998?", opts: ["Thursday", "Tuesday", "Saturday", "Friday"] },
+      { text: "Merry-go-round circle seating with 8 persons. Who is third to left of β?", opts: ["α", "γ", "φ", "ψ"] },
+      { text: "In which pair is first person sitting immediate right of second?", opts: ["δ, ψ", "β, ε", "η, β", "ψ, η"] },
+      { text: "8 friends in circle. Correct position of W is:", opts: ["Immediate left of V", "Immediate right of V", "Between U and V", "Immediate right of R"] },
+      { text: "If TOPPER = 8, INSTITUTION = 30, what is code of JEEADVANCED?", opts: ["55", "24", "30", "19"] },
+      { text: "How many triangles are there in the figure?" + SVGS.q87, opts: ["27", "28", "30", "None of these"] },
+      { text: "Find the next term in series: 6, 125, 12, 7, 64, 11, 8, 27, 10, 9, ?", opts: ["8", "9", "11", "10"] },
+      { text: "Amay walk route: 120m N, 40m NE, 40m SE to Akshat's, then 120√2 SE to temple. Shortest distance Amay's house to temple:", opts: ["40(3 + √2) m", "40(1 + 3√2) m", "5(5 + 24√2) m", "20(6 + √2) m"] },
+      { text: "Which answer figure is hidden in the question figure?" + SVGS.q90, opts: ["(1)", "(2)", "(3)", "(4)"] },
+      { text: "If x % y = y² - x², x $ y = x - y², x # y = 2xy, find value of {(13%5) $ 6} # 15:", opts: ["480", "720", "-360", "-120"] },
+      { text: "Find the missing number in the box figures:" + SVGS.q92, opts: ["48", "120", "27", "60"] },
+      { text: "Trades discussion in circle: X sits opposite Cook; Y right of Barber; Washerman left of Tailor; P opposite Z. Trades of X and Y:", opts: ["Tailor and Barber", "Barber and Cook", "Tailor and Cook", "Tailor and Washerman"] },
+      { text: "Six students row: K between V and R; V next to M; M next to B (extreme left); Q next to R. Who sits adjacent to V?", opts: ["R and Q", "B and M", "K and R", "M and K"] },
+      { text: "Ajay is 15th from right and 6th from left in line. How many boys added so total is 38?", opts: ["18", "19", "17", "20"] },
+      { text: "Sticks are twice balls (total 42). Red ball rank 18th with 9 sticks ahead. Number of balls behind Red ball:", opts: ["7", "6", "5", "8"] },
+      { text: "Numbers: 589, 362, 554, 371, 442. Subtract 3 from middle digit, reverse digits, arrange descending. Last digit of middle number:", opts: ["1", "2", "3", "4"] },
+      { text: "Five friends heights: T is 2nd tallest; P taller than only S; R and T taller than Q; P shorter than Q. Tallest person:", opts: ["R or T", "T", "R", "Q"] },
+      { text: "Circular table 8 persons alternating male/female. What is true about G?", opts: ["G is male", "G sits between F and H", "G is 3rd left of E", "G sits 2nd right of B"] },
+      { text: "Statements: All dogs are fruits. No chair is fruit. Some chairs are clowns.<br>Conclusions: I. Some clowns are dogs. II. Some chairs are dogs. III. No chair is dog. IV. No dog is clown.", opts: ["Either I or IV follows", "Either I or IV and III follow", "Either I or IV and II follow", "Either II or III follows and either I or IV follow"] }
+    ];
+
+    const questionsData = rawQuestions.map((q, idx) => ({
+      qId: idx + 1,
+      text: q.text,
+      options: q.opts,
+      correct: officialAns[idx]
+    }));
+
+    // State Variables
+    let currentIdx = 0;
+    const userResponses = {};
+    let timeRemainingSeconds = 150 * 60; // 150 Minutes
+    let timerInterval = null;
+    let isTimerPaused = false;
+    let isSubmitted = false;
+
+    questionsData.forEach(q => {
+      userResponses[q.qId] = { selectedOption: null, markedForReview: false, visited: false };
+    });
+
+    // 5 Ranges of 20 questions
+    const ranges = [
+      { name: "Q1 - Q20", start: 0 },
+      { name: "Q21 - Q40", start: 20 },
+      { name: "Q41 - Q60", start: 40 },
+      { name: "Q61 - Q80", start: 60 },
+      { name: "Q81 - Q100", start: 80 }
+    ];
+
+    function initRangeTabs() {
+      const bar = document.getElementById("rangeTabs");
+      bar.innerHTML = "";
+      ranges.forEach((r, idx) => {
+        const btn = document.createElement("button");
+        btn.id = `range-tab-${idx}`;
+        btn.className = `px-3 py-1 text-xs font-semibold rounded whitespace-nowrap transition ${
+          idx === 0 ? "bg-indigo-600 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+        }`;
+        btn.textContent = r.name;
+        btn.onclick = () => jumpToQuestion(r.start);
+        bar.appendChild(btn);
+      });
+    }
+
+    function updateRangeTabs() {
+      const activeRangeIdx = Math.floor(currentIdx / 20);
+      ranges.forEach((_, idx) => {
+        const tab = document.getElementById(`range-tab-${idx}`);
+        if (tab) {
+          tab.className = idx === activeRangeIdx
+            ? "px-3 py-1 text-xs font-semibold rounded whitespace-nowrap bg-indigo-600 text-white"
+            : "px-3 py-1 text-xs font-semibold rounded whitespace-nowrap bg-slate-100 text-slate-700 hover:bg-slate-200";
+        }
+      });
+    }
+
+    function updateTimerDisplay() {
+      const hrs = String(Math.floor(timeRemainingSeconds / 3600)).padStart(2, '0');
+      const mins = String(Math.floor((timeRemainingSeconds % 3600) / 60)).padStart(2, '0');
+      const secs = String(timeRemainingSeconds % 60).padStart(2, '0');
+      document.getElementById("timerDisplay").textContent = `${hrs}:${mins}:${secs}`;
+    }
+
+    function startTimer() {
+      updateTimerDisplay();
+      timerInterval = setInterval(() => {
+        if (!isTimerPaused) {
+          if (timeRemainingSeconds > 0) {
+            timeRemainingSeconds--;
+            updateTimerDisplay();
+          } else {
+            clearInterval(timerInterval);
+            alert("Time is up!");
+            submitExam();
+          }
+        }
+      }, 1000);
+    }
+
+    document.getElementById("btnPauseTimer").onclick = () => {
+      if (isSubmitted) return;
+      isTimerPaused = !isTimerPaused;
+      const btn = document.getElementById("btnPauseTimer");
+      if (isTimerPaused) {
+        btn.textContent = "▶ Resume";
+        btn.className = "bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs px-2.5 py-1.5 rounded shadow transition";
+      } else {
+        btn.textContent = "⏸ Pause";
+        btn.className = "bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs px-2.5 py-1.5 rounded shadow transition";
+      }
+    };
+
+    function renderQuestion(idx) {
+      currentIdx = idx;
+      const q = questionsData[idx];
+      const resp = userResponses[q.qId];
+      resp.visited = true;
+
+      document.getElementById("qNumberDisplay").textContent = `Question ${q.qId} of 100`;
+
+      let html = `<div class="mb-3 font-medium text-slate-900">${q.text}</div><div class="space-y-2">`;
+      q.options.forEach((optText, oIdx) => {
+        const isChecked = resp.selectedOption === oIdx;
+        html += `
+          <label class="flex items-center p-2.5 rounded-lg border cursor-pointer transition ${
+            isChecked ? 'bg-indigo-50 border-indigo-500 ring-1 ring-indigo-500 font-medium' : 'bg-slate-50 border-slate-200 hover:bg-slate-100'
+          }">
+            <input type="radio" name="optRadio" value="${oIdx}" ${isChecked ? 'checked' : ''} class="mr-2.5 text-indigo-600" onchange="selectOption(${oIdx})">
+            <span class="flex-1">${optText}</span>
+          </label>`;
+      });
+      html += `</div>`;
+
+      if (isSubmitted) {
+        const isCorrect = resp.selectedOption === q.correct;
+        html += `
+          <div class="mt-4 p-3 rounded-lg border text-xs ${isCorrect ? 'bg-emerald-50 border-emerald-300 text-emerald-900' : 'bg-rose-50 border-rose-300 text-rose-900'}">
+            <strong>${isCorrect ? '✓ Correct Answer' : '✕ Incorrect / Unattempted'}</strong><br>
+            Official Answer Key: <strong>Option (${q.correct + 1})</strong>
+          </div>`;
+      }
+
+      document.getElementById("questionContainer").innerHTML = html;
+      updatePalette();
+      updateRangeTabs();
+    }
+
+    function selectOption(optIdx) {
+      if (isSubmitted) return;
+      userResponses[questionsData[currentIdx].qId].selectedOption = optIdx;
+      renderQuestion(currentIdx);
+    }
+
+    function jumpToQuestion(idx) {
+      if (idx >= 0 && idx < questionsData.length) {
+        renderQuestion(idx);
+      }
+    }
+
+    function updatePalette() {
+      const palette = document.getElementById("paletteGrid");
+      palette.innerHTML = "";
+      questionsData.forEach((q, i) => {
+        const r = userResponses[q.qId];
+        let colorClass = "bg-slate-100 text-slate-700 border-slate-300";
+        if (r.markedForReview) colorClass = "bg-amber-500 text-white border-amber-600";
+        else if (r.selectedOption !== null) colorClass = "bg-emerald-600 text-white border-emerald-700";
+        else if (r.visited) colorClass = "bg-rose-500 text-white border-rose-600";
+
+        const btn = document.createElement("button");
+        btn.className = `h-6 text-[10px] rounded border flex items-center justify-center font-bold ${colorClass} ${
+          i === currentIdx ? 'ring-2 ring-indigo-500 ring-offset-1' : ''
+        }`;
+        btn.textContent = q.qId;
+        btn.onclick = () => jumpToQuestion(i);
+        palette.appendChild(btn);
+      });
+    }
+
+    document.getElementById("btnNext").onclick = () => {
+      if (currentIdx < questionsData.length - 1) jumpToQuestion(currentIdx + 1);
+    };
+    document.getElementById("btnPrev").onclick = () => {
+      if (currentIdx > 0) jumpToQuestion(currentIdx - 1);
+    };
+    document.getElementById("btnClear").onclick = () => {
+      if (isSubmitted) return;
+      userResponses[questionsData[currentIdx].qId].selectedOption = null;
+      renderQuestion(currentIdx);
+    };
+    document.getElementById("btnMarkReview").onclick = () => {
+      if (isSubmitted) return;
+      const r = userResponses[questionsData[currentIdx].qId];
+      r.markedForReview = !r.markedForReview;
+      renderQuestion(currentIdx);
+    };
+    document.getElementById("btnSubmitExam").onclick = () => {
+      if (confirm("Are you sure you want to submit the exam?")) submitExam();
+    };
+
+    function submitExam() {
+      if (isSubmitted) return;
+      isSubmitted = true;
+      clearInterval(timerInterval);
+
+      let totalScore = 0, totalCorrect = 0, totalIncorrect = 0, totalUnattempted = 0;
+
+      questionsData.forEach(q => {
+        const r = userResponses[q.qId];
+        if (r.selectedOption === null) {
+          totalUnattempted++;
+        } else if (r.selectedOption === q.correct) {
+          totalCorrect++;
+          totalScore += 4;
+        } else {
+          totalIncorrect++;
+          totalScore -= 1;
+        }
+      });
+
+      document.getElementById("resTotalScore").textContent = `${totalScore} / 400`;
+      document.getElementById("resCorrect").textContent = totalCorrect;
+      document.getElementById("resIncorrect").textContent = totalIncorrect;
+      document.getElementById("resUnattempted").textContent = totalUnattempted;
+
+      document.getElementById("resultModal").classList.remove("hidden");
+      document.getElementById("btnSubmitExam").classList.add("hidden");
+      document.getElementById("btnPauseTimer").classList.add("hidden");
+      renderQuestion(currentIdx);
+    }
+
+    document.getElementById("btnReviewSolutions").onclick = () => {
+      document.getElementById("resultModal").classList.add("hidden");
+      renderQuestion(0);
+    };
+
+    initRangeTabs();
+    renderQuestion(0);
+    startTimer();
+  </script>
+</body>
+</html>

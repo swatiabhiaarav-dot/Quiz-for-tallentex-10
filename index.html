@@ -1,42 +1,108 @@
-// Set to 150 minutes (150 * 60 = 9000 seconds)
-let timeRemainingSeconds = 150 * 60; 
-let timerInterval = null;
-let isTimerPaused = false;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TALLENTEX Practice Exam Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col font-sans">
 
-function updateTimerDisplay() {
-  const hrs = String(Math.floor(timeRemainingSeconds / 3600)).padStart(2, '0');
-  const mins = String(Math.floor((timeRemainingSeconds % 3600) / 60)).padStart(2, '0');
-  const secs = String(timeRemainingSeconds % 60).padStart(2, '0');
-  document.getElementById("timerDisplay").textContent = `${hrs}:${mins}:${secs}`;
-}
+  <!-- Header -->
+  <header class="bg-indigo-900 text-white shadow-md">
+    <div class="max-w-5xl mx-auto px-4 py-5 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <span class="bg-amber-400 text-slate-950 text-xs font-black uppercase px-2 py-0.5 rounded tracking-wide">Test Series</span>
+        <h1 class="text-lg sm:text-xl font-bold">Class 10 Exam Portal</h1>
+      </div>
+      <span class="text-xs text-indigo-200 bg-indigo-950/60 px-3 py-1 rounded-full border border-indigo-700/50">Full Length Mocks</span>
+    </div>
+  </header>
 
-function startTimer() {
-  updateTimerDisplay();
-  timerInterval = setInterval(() => {
-    if (!isTimerPaused) {
-      if (timeRemainingSeconds > 0) {
-        timeRemainingSeconds--;
-        updateTimerDisplay();
-      } else {
-        clearInterval(timerInterval);
-        alert("Time is up!");
-        submitExam();
-      }
-    }
-  }, 1000);
-}
+  <!-- Main Content -->
+  <main class="max-w-5xl mx-auto px-4 py-8 flex-1 w-full">
+    <div class="mb-8">
+      <h2 class="text-2xl font-black text-slate-900">Available Practice Tests</h2>
+      <p class="text-slate-500 text-sm mt-1">Select a test below to start practicing with real-time scoring.</p>
+    </div>
 
-// Pause / Resume Toggle Handler
-document.getElementById("btnPauseTimer").onclick = () => {
-  if (isSubmitted) return;
-  isTimerPaused = !isTimerPaused;
-  const btn = document.getElementById("btnPauseTimer");
-  
-  if (isTimerPaused) {
-    btn.textContent = "▶ Resume";
-    btn.className = "bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs px-2.5 py-1.5 rounded shadow transition";
-  } else {
-    btn.textContent = "⏸ Pause";
-    btn.className = "bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs px-2.5 py-1.5 rounded shadow transition";
-  }
-};
+    <!-- Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- Card 1: 2026 Paper U -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="bg-indigo-100 text-indigo-700 font-bold text-xs px-2.5 py-0.5 rounded-full">Paper Code U</span>
+            <span class="text-xs text-slate-400 font-medium">80 Questions</span>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900">TALLENTEX 2026 Mock Test</h3>
+          <p class="text-slate-600 text-xs mt-2 leading-relaxed">
+            Full test covering Physics, Chemistry, Biology, Mathematics, and Mental Ability.
+          </p>
+          <div class="mt-4 flex flex-wrap gap-2 text-[11px] font-semibold text-slate-500">
+            <span class="bg-slate-100 px-2 py-0.5 rounded border">⏱ 120 Mins</span>
+            <span class="bg-slate-100 px-2 py-0.5 rounded border">🎯 320 Marks</span>
+          </div>
+        </div>
+        <div class="mt-6">
+          <a href="2026-paper-u.html" class="block w-full text-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm py-2.5 rounded-xl transition shadow">
+            Start Exam
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 2: 2025 Paper X -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="bg-emerald-100 text-emerald-800 font-bold text-xs px-2.5 py-0.5 rounded-full">Paper Code X</span>
+            <span class="text-xs text-slate-400 font-medium">80 Questions</span>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900">TALLENTEX 2025 Mock Test</h3>
+          <p class="text-slate-600 text-xs mt-2 leading-relaxed">
+            Full paper with optics, reactions, human biology, coordinate geometry, and IQ questions.
+          </p>
+          <div class="mt-4 flex flex-wrap gap-2 text-[11px] font-semibold text-slate-500">
+            <span class="bg-slate-100 px-2 py-0.5 rounded border">⏱ 120 Mins</span>
+            <span class="bg-slate-100 px-2 py-0.5 rounded border">🎯 320 Marks</span>
+          </div>
+        </div>
+        <div class="mt-6">
+          <a href="2025-paper-x.html" class="block w-full text-center bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm py-2.5 rounded-xl transition shadow">
+            Start Exam
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 3: Mental Ability 100 Questions -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="bg-purple-100 text-purple-700 font-bold text-xs px-2.5 py-0.5 rounded-full">Special Practice</span>
+            <span class="text-xs text-slate-400 font-medium">100 Questions</span>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900">Mental Ability (IQ) Practice</h3>
+          <p class="text-slate-600 text-xs mt-2 leading-relaxed">
+            100 questions covering series, circular seating, syllogisms, and reasoning puzzles with a 150-minute pauseable timer[span_3](start_span)[span_3](end_span)[span_4](start_span)[span_4](end_span)[span_5](start_span)[span_5](end_span)[span_6](start_span)[span_6](end_span)[span_7](start_span)[span_7](end_span)[span_8](start_span)[span_8](end_span)[span_9](start_span)[span_9](end_span)[span_10](start_span)[span_10](end_span)[span_11](start_span)[span_11](end_span)[span_12](start_span)[span_12](end_span).
+          </p>
+          <div class="mt-4 flex flex-wrap gap-2 text-[11px] font-semibold text-slate-500">
+            <span class="bg-slate-100 px-2 py-0.5 rounded border">⏱ 150 Mins</span>
+            <span class="bg-slate-100 px-2 py-0.5 rounded border">🎯 400 Marks</span>
+          </div>
+        </div>
+        <div class="mt-6">
+          <a href="mental-ability.html" class="block w-full text-center bg-purple-600 hover:bg-purple-700 text-white font-semibold text-sm py-2.5 rounded-xl transition shadow">
+            Start Exam
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-400">
+    Offline-ready practice mock portal &bull; Class 10
+  </footer>
+</body>
+</html>
